@@ -30,8 +30,8 @@ export const site = {
   } as Record<string, string>,
   logo: {
     src: "/brand/incognito-logo.png",
-    width: 543,
-    height: 578,
+    width: 538,
+    height: 570,
     alt: "Incognito Digital Solutions",
   },
   ogImage: "/og/og-default.png",

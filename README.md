@@ -59,9 +59,9 @@ tests/unit, tests/e2e     Automated tests
 
 ## The logo
 
-`public/brand/incognito-logo-original.png` is the logo exactly as supplied. `public/brand/incognito-logo.png` is the same artwork with only the empty transparent canvas around it trimmed, so it can sit at a sensible size in the navigation. The artwork itself is not redrawn, recoloured or cropped. Next.js serves optimised AVIF/WebP versions automatically.
+`public/brand/incognito-logo-original.png` is the logo exactly as supplied. That file's transparent areas also stored a hidden grey glow layer, which some apps and image viewers display as a grey square. `public/brand/incognito-logo.png` is the version the site uses: the hidden layer is removed so the background is fully transparent, and the empty canvas around the artwork is trimmed. The hexagons and lettering are untouched. Next.js serves optimised AVIF/WebP versions automatically.
 
-The supplied logo is a **stacked** mark (icon above the wordmark), so in a navigation bar it displays about 68 px wide at 72 px tall. Its navy wordmark needs a light background, which is why the header is white and the footer places the logo on a white tile. If a **horizontal** version of the logo (icon beside the wordmark) exists, add it to `public/brand/`, update `site.logo` in `src/content/site.ts` (path, width, height) and it will display at about 150–190 px wide as originally specified. A dedicated square icon file would also improve the favicon.
+The supplied logo is a **stacked** mark (icon above the wordmark), so in a navigation bar it displays about 68 px wide at 72 px tall. Its navy wordmark needs a light background, which is why the header and footer are light. If a **horizontal** version of the logo (icon beside the wordmark) exists, add it to `public/brand/`, update `site.logo` in `src/content/site.ts` (path, width, height) and it will display at about 150–190 px wide as originally specified. A dedicated square icon file would also improve the favicon.
 
 ## Updating content
 

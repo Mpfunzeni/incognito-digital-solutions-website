@@ -92,7 +92,7 @@ export function ConsentSettingsButton() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))}
-      className="hover:text-white"
+      className="hover:text-ink-900"
     >
       Cookie settings
     </button>

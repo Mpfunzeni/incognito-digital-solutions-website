@@ -18,7 +18,7 @@ export function Footer() {
   const socials = Object.entries(site.social).filter(([, url]) => Boolean(url));
   const year = new Date().getFullYear();
   return (
-    <footer className="on-dark bg-ink-900 text-slate-300" aria-labelledby="footer-heading">
+    <footer className="border-t border-line bg-surface-muted text-text-muted" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -27,7 +27,7 @@ export function Footer() {
           <div>
             <Link
               href="/"
-              className="inline-flex rounded-2xl bg-white p-3 shadow-sm"
+              className="inline-flex rounded-md"
               aria-label="Incognito Digital Solutions home"
             >
               <Image
@@ -51,7 +51,7 @@ export function Footer() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40 hover:text-white"
+                      className="rounded-full border border-line px-3 py-1.5 text-sm hover:border-ink-500 hover:text-ink-900"
                     >
                       {socialLabels[key] ?? key}
                     </a>
@@ -62,11 +62,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-white">Services</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-900">Services</h3>
             <ul className="mt-5 space-y-3">
               {publishedServices.map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`} className="hover:text-white">
+                  <Link href={`/services/${s.slug}`} className="hover:text-ink-900">
                     {s.shortTitle}
                   </Link>
                 </li>
@@ -75,17 +75,17 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-white">Company</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-900">Company</h3>
             <ul className="mt-5 space-y-3">
               {mainNav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="hover:text-white">
+                  <Link href={item.href} className="hover:text-ink-900">
                     {item.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/get-a-quote" className="hover:text-white">
+                <Link href="/get-a-quote" className="hover:text-ink-900">
                   Get a Quote
                 </Link>
               </li>
@@ -93,26 +93,26 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-white">Contact</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-900">Contact</h3>
             <ul className="mt-5 space-y-4">
               <li>
-                <a href={`tel:${site.contact.phoneE164}`} className="group flex items-center gap-3 hover:text-white">
-                  <span className="grid size-9 place-items-center rounded-full bg-white/5 text-brand-teal group-hover:bg-white/10">
+                <a href={`tel:${site.contact.phoneE164}`} className="group flex items-center gap-3 hover:text-ink-900">
+                  <span className="grid size-9 place-items-center rounded-full bg-white text-brand-teal-dark ring-1 ring-line">
                     <Phone className="size-4" aria-hidden="true" />
                   </span>
                   {site.contact.phoneDisplay}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${site.contact.email}`} className="group flex items-center gap-3 break-all hover:text-white">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/5 text-brand-teal group-hover:bg-white/10">
+                <a href={`mailto:${site.contact.email}`} className="group flex items-center gap-3 break-all hover:text-ink-900">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-brand-teal-dark ring-1 ring-line">
                     <Mail className="size-4" aria-hidden="true" />
                   </span>
                   {site.contact.email}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <span className="grid size-9 place-items-center rounded-full bg-white/5 text-brand-teal">
+                <span className="grid size-9 place-items-center rounded-full bg-white text-brand-teal-dark ring-1 ring-line">
                   <Globe className="size-4" aria-hidden="true" />
                 </span>
                 Serving businesses across South Africa
@@ -121,18 +121,18 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-line pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.name}. All rights reserved.
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             <li>
-              <Link href="/privacy-policy" className="hover:text-white">
+              <Link href="/privacy-policy" className="hover:text-ink-900">
                 Privacy Policy
               </Link>
             </li>
             <li>
-              <Link href="/terms-and-conditions" className="hover:text-white">
+              <Link href="/terms-and-conditions" className="hover:text-ink-900">
                 Terms and Conditions
               </Link>
             </li>
