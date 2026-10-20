@@ -28,6 +28,11 @@ export const site = {
     x: "",
     googleBusinessProfile: "",
   } as Record<string, string>,
+  founder: {
+    name: "Tshepo Ramaele",
+    role: "Founder & IT enthusiast",
+    photo: "/team/tshepo-ramaele.jpg",
+  },
   logo: {
     src: "/brand/incognito-logo.png",
     width: 538,

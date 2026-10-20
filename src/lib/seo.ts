@@ -57,6 +57,12 @@ export function organizationJsonLd() {
     email: site.contact.email,
     telephone: site.contact.phoneE164,
     areaServed: { "@type": "Country", name: site.areaServed },
+    founder: {
+      "@type": "Person",
+      name: site.founder.name,
+      jobTitle: site.founder.role,
+      image: absoluteUrl(site.founder.photo),
+    },
     contactPoint: [
       {
         "@type": "ContactPoint",

@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CtaBanner } from "@/components/sections/CtaBanner";
+import Image from "next/image";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
 
@@ -51,6 +52,27 @@ export default function AboutPage() {
               new business or improving an existing website, we focus on solutions that help customers find you, trust
               you and get in touch.
             </p>
+          </div>
+        </Container>
+      </section>
+      <section aria-labelledby="founder" className="border-t border-line py-20 sm:py-24">
+        <Container className="flex flex-col items-center gap-10 text-center md:flex-row md:gap-14 md:text-left">
+          <div className="shrink-0 rounded-full bg-gradient-to-br from-brand-teal via-brand-purple to-brand-orange p-1.5 shadow-[var(--shadow-card)]">
+            <Image
+              src={site.founder.photo}
+              alt={`${site.founder.name}, ${site.founder.role} of ${site.name}`}
+              width={800}
+              height={800}
+              sizes="(min-width: 768px) 256px, 208px"
+              className="size-52 rounded-full border-4 border-white object-cover md:size-64"
+            />
+          </div>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand-teal-dark">Meet the founder</p>
+            <h2 id="founder" className="mt-3 text-3xl font-extrabold text-ink-900 sm:text-4xl">
+              {site.founder.name}
+            </h2>
+            <p className="mt-2 text-lg font-medium text-text-muted">{site.founder.role}</p>
           </div>
         </Container>
       </section>
