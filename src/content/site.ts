@@ -14,10 +14,10 @@ export const site = {
   country: "South Africa",
   areaServed: "South Africa",
   contact: {
-    phoneDisplay: "061 316 8967",
-    phoneE164: "+27613168967",
+    phoneDisplay: "084 803 7471",
+    phoneE164: "+27848037471",
     email: "info@incognitodigitalsolutions.co.za",
-    /** Set NEXT_PUBLIC_WHATSAPP_NUMBER (digits only, e.g. 27613168967) once the business WhatsApp number is verified. */
+    /** Set NEXT_PUBLIC_WHATSAPP_NUMBER (digits only, e.g. 27848037471) once the business WhatsApp number is verified. */
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
   },
   /** Add verified profile URLs only. Empty entries are not rendered. */

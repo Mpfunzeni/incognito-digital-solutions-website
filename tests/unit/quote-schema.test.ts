@@ -35,7 +35,7 @@ describe("quoteSchema", () => {
     const r = quoteSchema.safeParse({ ...valid, contactMethod: "Phone" });
     expect(r.success).toBe(false);
     if (!r.success) expect(toFieldErrors(r.error).phone).toBeTruthy();
-    expect(quoteSchema.safeParse({ ...valid, contactMethod: "Phone", phone: "061 316 8967" }).success).toBe(true);
+    expect(quoteSchema.safeParse({ ...valid, contactMethod: "Phone", phone: "084 803 7471" }).success).toBe(true);
   });
 
   it("rejects a filled honeypot and unknown services", () => {
