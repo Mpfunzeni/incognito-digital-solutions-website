@@ -56,7 +56,7 @@ export default function AboutPage() {
         </Container>
       </section>
       <section aria-labelledby="founder" className="border-t border-line py-20 sm:py-24">
-        <Container className="flex flex-col items-center gap-10 text-center md:flex-row md:gap-14 md:text-left">
+        <Container className="flex flex-col items-center gap-8 text-center">
           <div className="shrink-0 rounded-full bg-gradient-to-br from-brand-teal via-brand-purple to-brand-orange p-1.5 shadow-[var(--shadow-card)]">
             <Image
               src={site.founder.photo}
