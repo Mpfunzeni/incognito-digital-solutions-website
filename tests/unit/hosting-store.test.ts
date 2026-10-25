@@ -45,9 +45,9 @@ describe("hosting store", () => {
     const c = await newCustomer(`order${run}@example.com`);
     const invoice = await placeOrder(c, { planId: "business", cycle: "annually", domainAction: "register", domain: "orderbiz.co.za" });
     expect(invoice.status).toBe("unpaid");
-    expect(invoice.total_cents).toBe(199000);
+    expect(invoice.total_cents).toBe(214000);
     expect(Array.isArray(invoice.lines)).toBe(true);
-    expect(invoice.lines.map((l) => l.amount)).toEqual([1990, 99, -99]);
+    expect(invoice.lines.map((l) => l.amount)).toEqual([1990, 150]);
     expect(Number(invoice.number)).toBeGreaterThanOrEqual(1001);
     expect((await listServices(c.id))[0].status).toBe("pending");
 

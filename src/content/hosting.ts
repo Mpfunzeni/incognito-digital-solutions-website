@@ -1,6 +1,8 @@
 /**
  * Web hosting plans and domain prices sold through the online hosting system.
- * Amounts are in South African Rand (ZAR), whole rand. Change prices and
+ * Amounts are in South African Rand (ZAR), whole rand, excluding VAT. Monthly
+ * prices and domain prices match src/content/service-pricing.ts; the yearly
+ * price (two months free) is a proposal to confirm. Change prices and
  * features here; the hosting page, order form, invoices and checkout all read
  * from this file.
  *
@@ -29,46 +31,33 @@ export const hostingPlans: HostingPlan[] = [
   {
     id: "starter",
     name: "Starter",
-    tagline: "A single website or landing page for a new business.",
+    tagline: "Reliable hosting for a small business website.",
     monthly: 99,
     annually: 990,
     whmPackage: "incognito_starter",
-    specs: { storage: "5 GB NVMe SSD", websites: "1 website", email: "5 email accounts", bandwidth: "Unmetered", backups: "Weekly backups" },
-    features: ["Free SSL certificate", "cPanel control panel", "1-click WordPress install", "Email support"],
+    specs: { storage: "10 GB SSD storage", websites: "1 website", email: "2 email mailboxes", bandwidth: "Unmetered bandwidth", backups: "Weekly backups" },
+    features: ["Free SSL certificate", "cPanel control panel", "1-click WordPress install"],
   },
   {
     id: "business",
     name: "Business",
-    tagline: "The best fit for most small business websites.",
+    tagline: "More room and faster performance for growing sites.",
     monthly: 199,
     annually: 1990,
     highlighted: true,
-    freeDomainOnAnnual: true,
     whmPackage: "incognito_business",
-    specs: { storage: "20 GB NVMe SSD", websites: "3 websites", email: "25 email accounts", bandwidth: "Unmetered", backups: "Daily backups" },
-    features: ["Free SSL certificates", "cPanel control panel", "1-click WordPress install", "Malware scanning", "Email and phone support"],
+    specs: { storage: "30 GB SSD storage", websites: "Up to 3 websites", email: "10 email mailboxes", bandwidth: "Unmetered bandwidth", backups: "Daily backups" },
+    features: ["Free SSL certificate", "Uptime monitoring", "cPanel control panel", "1-click WordPress install"],
   },
   {
-    id: "professional",
-    name: "Professional",
-    tagline: "Busy websites, online stores and growing teams.",
-    monthly: 349,
-    annually: 3490,
-    freeDomainOnAnnual: true,
-    whmPackage: "incognito_professional",
-    specs: { storage: "50 GB NVMe SSD", websites: "10 websites", email: "Unlimited email accounts", bandwidth: "Unmetered", backups: "Daily backups" },
-    features: ["Free SSL certificates", "Staging site", "Malware scanning and removal", "Priority support", "Free website migration"],
-  },
-  {
-    id: "ecommerce",
-    name: "E-commerce",
-    tagline: "Extra resources for WooCommerce and online stores.",
-    monthly: 549,
-    annually: 5490,
-    freeDomainOnAnnual: true,
-    whmPackage: "incognito_ecommerce",
-    specs: { storage: "100 GB NVMe SSD", websites: "Unlimited websites", email: "Unlimited email accounts", bandwidth: "Unmetered", backups: "Daily backups, 30-day history" },
-    features: ["Free SSL certificates", "Staging site", "Extra CPU and memory", "Malware scanning and removal", "Priority support", "Free website migration"],
+    id: "pro",
+    name: "Pro",
+    tagline: "High-performance hosting for online stores and busy sites.",
+    monthly: 399,
+    annually: 3990,
+    whmPackage: "incognito_pro",
+    specs: { storage: "75 GB SSD storage", websites: "Up to 10 websites", email: "Unlimited email mailboxes", bandwidth: "Unmetered bandwidth", backups: "Daily backups with one-click restore" },
+    features: ["Free SSL certificate", "Uptime monitoring", "Priority support", "cPanel control panel"],
   },
 ];
 
@@ -78,11 +67,8 @@ export type DomainTld = { tld: string; register: number; transfer: number };
 
 /** Yearly prices per extension. */
 export const domainTlds: DomainTld[] = [
-  { tld: ".co.za", register: 99, transfer: 99 },
-  { tld: ".org.za", register: 99, transfer: 99 },
-  { tld: ".com", register: 249, transfer: 249 },
-  { tld: ".net", register: 279, transfer: 279 },
-  { tld: ".africa", register: 199, transfer: 199 },
+  { tld: ".co.za", register: 150, transfer: 150 },
+  { tld: ".com", register: 250, transfer: 250 },
 ];
 
 export function getPlan(id: string | null | undefined) {

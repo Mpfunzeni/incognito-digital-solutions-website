@@ -13,18 +13,22 @@ describe("hosting prices", () => {
     expect(total).toBe(getPlan("starter")!.monthly);
   });
 
-  it("adds a domain registration and gives it free on annual plans that include one", () => {
+  it("adds a domain registration", () => {
     const monthly = priceOrder({ planId: "business", cycle: "monthly", domainAction: "register", domain: "shop.co.za" });
     expect(monthly.total).toBe(getPlan("business")!.monthly + findTld("shop.co.za")!.register);
-    const yearly = priceOrder({ planId: "business", cycle: "annually", domainAction: "register", domain: "shop.co.za" });
-    expect(yearly.total).toBe(getPlan("business")!.annually);
-    const starterYearly = priceOrder({ planId: "starter", cycle: "annually", domainAction: "register", domain: "shop.co.za" });
-    expect(starterYearly.total).toBe(getPlan("starter")!.annually + 99);
+    const yearly = priceOrder({ planId: "starter", cycle: "annually", domainAction: "register", domain: "shop.co.za" });
+    expect(yearly.total).toBe(getPlan("starter")!.annually + 150);
   });
 
-  it("charges for transfers even on annual plans", () => {
-    const r = priceOrder({ planId: "business", cycle: "annually", domainAction: "transfer", domain: "shop.com" });
-    expect(r.total).toBe(getPlan("business")!.annually + findTld("shop.com")!.transfer);
+  it("gives the domain free on yearly billing only for plans that offer it", () => {
+    const plan = { ...getPlan("business")!, freeDomainOnAnnual: true };
+    hostingPlans.push({ ...plan, id: "promo" });
+    try {
+      expect(priceOrder({ planId: "promo", cycle: "annually", domainAction: "register", domain: "shop.co.za" }).total).toBe(plan.annually);
+      expect(priceOrder({ planId: "promo", cycle: "annually", domainAction: "transfer", domain: "shop.co.za" }).total).toBe(plan.annually + 150);
+    } finally {
+      hostingPlans.pop();
+    }
   });
 
   it("rejects unknown plans and unsupported extensions", () => {
@@ -32,8 +36,9 @@ describe("hosting prices", () => {
     expect(() => priceOrder({ planId: "starter", cycle: "monthly", domainAction: "register", domain: "a.xyz" })).toThrow();
   });
 
-  it("matches .org.za before shorter suffixes and gives a saving for yearly billing", () => {
-    expect(findTld("ngo.org.za")?.tld).toBe(".org.za");
+  it("matches supported extensions and gives a saving for yearly billing", () => {
+    expect(findTld("shop.co.za")?.tld).toBe(".co.za");
+    expect(findTld("shop.org.za")).toBeUndefined();
     for (const p of hostingPlans) expect(annualSaving(p)).toBeGreaterThan(0);
   });
 });

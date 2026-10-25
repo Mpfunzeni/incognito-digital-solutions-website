@@ -15,7 +15,7 @@ import { buttonClasses } from "@/components/ui/Button";
 export const metadata = pageMetadata({
   title: "Web Hosting Plans in South Africa",
   description:
-    "Fast, secure cPanel web hosting for South African businesses from R99 a month. Free SSL, business email, daily backups and local support. Order online in minutes.",
+    "Fast, secure cPanel web hosting for South African businesses from R99 a month. Free SSL, business email, backups and local support. Order online in minutes.",
   path: "/hosting",
 });
 
@@ -28,7 +28,7 @@ const faqs = [
   {
     question: "Can I move my existing website to you?",
     answer:
-      "Yes. Choose \"I already own this domain\" or \"Transfer my domain\" when you order. Professional and E-commerce plans include free website migration, and we can quote migrations on other plans.",
+      "Yes. Choose \"I already own this domain\" or \"Transfer my domain\" when you order. We can also move your website files, email and databases for you as a once-off migration service.",
   },
   {
     question: "Is there a contract?",
@@ -53,7 +53,7 @@ const faqs = [
 
 const highlights = [
   { icon: Lock, title: "Free SSL on every site", text: "HTTPS is set up automatically so browsers trust your website." },
-  { icon: HardDrive, title: "NVMe SSD storage", text: "Fast storage for quicker page loads and a better Google score." },
+  { icon: HardDrive, title: "SSD storage", text: "Fast storage for quicker page loads and a better Google score." },
   { icon: RefreshCw, title: "Automatic backups", text: "Regular backups you can restore from cPanel when you need them." },
   { icon: Server, title: "cPanel included", text: "The industry-standard control panel for files, email and databases." },
   { icon: LifeBuoy, title: "Local support", text: `Talk to a real person on ${site.contact.phoneDisplay} or by email.` },
@@ -93,7 +93,7 @@ export default function HostingPage() {
             align="center"
             eyebrow="Plans"
             title="Choose your hosting plan"
-            description="All prices in South African Rand. Pay yearly and get two months free."
+            description="All prices in South African Rand, excluding VAT. Pay yearly and get two months free."
           />
           <div className="mt-10">
             <PlanPicker />
@@ -143,7 +143,6 @@ export default function HostingPage() {
                     ["Email accounts", (p) => p.specs.email],
                     ["Bandwidth", (p) => p.specs.bandwidth],
                     ["Backups", (p) => p.specs.backups],
-                    ["Free domain (yearly billing)", (p) => (p.freeDomainOnAnnual ? "Yes" : "No")],
                   ] as [string, (p: (typeof hostingPlans)[number]) => string][]
                 ).map(([label, get]) => (
                   <tr key={label}>
@@ -169,7 +168,7 @@ export default function HostingPage() {
             id="domains-heading"
             eyebrow="Domains"
             title="Domain names"
-            description="Register a new domain or transfer one you already own when you order hosting. Prices are per year."
+            description="Register a new domain or transfer one you already own when you order hosting. Prices are per year, excluding VAT."
           />
           <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-white shadow-[var(--shadow-card)]">
             <table className="w-full text-left text-[0.95rem]">

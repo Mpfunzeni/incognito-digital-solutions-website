@@ -78,7 +78,7 @@ export function OrderForm({ initialPlan, initialCycle }: { initialPlan: string; 
                 <input type="radio" name="cycle" value={c} checked={cycle === c} onChange={() => setCycle(c)} className="size-4.5 accent-[#0a7c78]" />
                 <span>
                   <span className="block font-bold text-ink-900">{c === "monthly" ? "Monthly" : "Yearly"}</span>
-                  <span className="text-sm text-text-muted">{c === "monthly" ? "Pay month to month" : "2 months free, plus a free domain on most plans"}</span>
+                  <span className="text-sm text-text-muted">{c === "monthly" ? "Pay month to month" : "2 months free"}</span>
                 </span>
               </label>
             ))}
@@ -152,7 +152,7 @@ export function OrderForm({ initialPlan, initialCycle }: { initialPlan: string; 
                   ))}
               </ul>
               <p className="mt-5 flex items-baseline justify-between border-t border-white/15 pt-4">
-                <span className="font-semibold text-white">Due today</span>
+                <span className="font-semibold text-white">Due today <span className="text-xs font-normal text-slate-400">excl. VAT</span></span>
                 <span className="font-display text-3xl font-bold text-white" aria-live="polite">
                   {formatRand(domainPending ? summary.lines[0].amount : summary.total)}
                 </span>

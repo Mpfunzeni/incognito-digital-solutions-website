@@ -35,7 +35,7 @@ export function PlanPicker() {
         </div>
       </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-12 grid gap-6 md:grid-cols-3">
         {hostingPlans.map((plan) => {
           const dark = plan.highlighted;
           const perMonth = cycle === "annually" ? plan.annually / 12 : plan.monthly;
