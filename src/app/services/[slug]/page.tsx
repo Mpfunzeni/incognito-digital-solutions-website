@@ -78,6 +78,11 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         ]}
       >
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          {service.slug === "web-hosting-domains" && (
+            <ButtonLink href="/hosting" size="lg" track="cta_hosting_plans_service_hero">
+              See hosting plans <ArrowRight className="size-4" aria-hidden="true" />
+            </ButtonLink>
+          )}
           <ButtonLink href={quoteHref} size="lg" track={`cta_quote_service_hero_${service.slug}`}>
             Get a Quote <ArrowRight className="size-4" aria-hidden="true" />
           </ButtonLink>

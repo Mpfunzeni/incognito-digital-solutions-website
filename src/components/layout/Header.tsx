@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, Phone, UserRound, X } from "lucide-react";
 import { mainNav, site } from "@/content/site";
 import { publishedServices } from "@/content/services";
 import { Icon, accentClasses } from "@/components/ui/Icon";
@@ -123,7 +123,7 @@ export function Header() {
         </Link>
 
         <nav aria-label="Main" className="ml-auto hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-0.5 xl:gap-1">
             {mainNav.map((item) =>
               item.href === "/services" ? (
                 <li key={item.href} ref={servicesRef} className="relative">
@@ -202,6 +202,14 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-2 lg:ml-2">
           <Link
+            href="/account"
+            aria-label="Client login"
+            title="Client login"
+            className="grid size-11 place-items-center rounded-full text-ink-800 hover:bg-ink-900/5"
+          >
+            <UserRound className="size-5" aria-hidden="true" />
+          </Link>
+          <Link
             href="/get-a-quote"
             data-track="cta_get_quote_header"
             className={buttonClasses("primary", "sm", "sm:h-11 sm:px-5 sm:text-[0.95rem]")}
@@ -271,6 +279,9 @@ export function Header() {
             >
               Get a Quote
             </Link>
+            <Link href="/account" onClick={() => setMobileOpen(false)} className={buttonClasses("dark", "lg", "w-full")}>
+              <UserRound className="size-4" aria-hidden="true" /> Client login
+            </Link>
             <a href={`tel:${site.contact.phoneE164}`} className={buttonClasses("secondary", "lg", "w-full")}>
               <Phone className="size-4" aria-hidden="true" /> Call {site.contact.phoneDisplay}
             </a>
@@ -282,7 +293,7 @@ export function Header() {
 }
 
 function navLinkClass(active: boolean) {
-  return `relative rounded-full px-3.5 py-2 text-[0.95rem] font-medium transition-colors ${
-    active ? "text-ink-900 after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-brand-teal" : "text-ink-700 hover:text-ink-900 hover:bg-ink-900/5"
+  return `relative whitespace-nowrap rounded-full px-2.5 py-2 text-[0.92rem] font-medium transition-colors xl:px-3.5 xl:text-[0.95rem] ${
+    active ? "text-ink-900 after:absolute after:inset-x-2.5 xl:after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-brand-teal" : "text-ink-700 hover:text-ink-900 hover:bg-ink-900/5"
   }`;
 }
