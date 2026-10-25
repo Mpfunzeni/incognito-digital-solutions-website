@@ -13,7 +13,7 @@ type Props = {
 export function SectionHeading({ eyebrow, title, description, align = "left", tone = "light", as: Tag = "h2", id }: Props) {
   const center = align === "center";
   return (
-    <div className={`${center ? "mx-auto text-center" : ""} max-w-3xl`}>
+    <div className={`reveal ${center ? "mx-auto text-center" : ""} max-w-3xl`}>
       {eyebrow && (
         <p
           className={`mb-3 text-sm font-semibold uppercase tracking-[0.16em] ${

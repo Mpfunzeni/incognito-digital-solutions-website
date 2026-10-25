@@ -2,13 +2,27 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import type { Service } from "@/content/services";
 import { Icon, accentClasses } from "@/components/ui/Icon";
+import { revealDelay } from "@/lib/motion";
 
-export function ServiceCard({ service, headingLevel = "h3" }: { service: Service; headingLevel?: "h2" | "h3" }) {
+export function ServiceCard({
+  service,
+  headingLevel = "h3",
+  revealDelay: step = 0,
+}: {
+  service: Service;
+  headingLevel?: "h2" | "h3";
+  revealDelay?: number;
+}) {
   const a = accentClasses[service.accent];
   const Heading = headingLevel;
   return (
-    <article className="group relative flex h-full flex-col rounded-[var(--radius-card)] border border-line bg-white p-7 shadow-[var(--shadow-card)] transition-[box-shadow,transform,border-color] duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-[var(--shadow-card-hover)]">
-      <span className={`grid size-12 place-items-center rounded-xl ${a.bg} ${a.text}`}>
+    <article
+      className="glow-card lift reveal group relative flex h-full flex-col rounded-[var(--radius-card)] border border-line bg-white p-7 shadow-[var(--shadow-card)] hover:border-transparent"
+      style={revealDelay(step)}
+    >
+      <span
+        className={`grid size-12 place-items-center rounded-xl transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110 ${a.bg} ${a.text}`}
+      >
         <Icon name={service.icon} className="size-6" />
       </span>
       <Heading className="mt-6 text-xl font-bold text-ink-900">{service.title}</Heading>

@@ -2,12 +2,14 @@ import Link from "next/link";
 import { Check, Info, Minus } from "lucide-react";
 import { formatPrice, type Package } from "@/content/pricing";
 import { buttonClasses } from "@/components/ui/Button";
+import { revealDelay } from "@/lib/motion";
 
-export function PricingCard({ pkg }: { pkg: Package }) {
+export function PricingCard({ pkg, revealDelay: step = 0 }: { pkg: Package; revealDelay?: number }) {
   const dark = pkg.highlighted;
   return (
     <article
-      className={`relative flex h-full flex-col rounded-[var(--radius-card)] p-7 ${
+      style={revealDelay(step)}
+      className={`glow-card lift reveal relative flex h-full flex-col rounded-[var(--radius-card)] p-7 ${
         dark
           ? "on-dark bg-ink-900 text-slate-300 shadow-[0_30px_60px_-30px_rgb(15_31_46/0.6)] ring-1 ring-brand-teal/40"
           : "border border-line bg-white shadow-[var(--shadow-card)]"

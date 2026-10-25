@@ -1,12 +1,16 @@
 import { ExternalLink } from "lucide-react";
 import type { PortfolioItem } from "@/content/portfolio";
 import { PortfolioThumb } from "./PortfolioThumb";
+import { revealDelay } from "@/lib/motion";
 
-export function PortfolioCard({ item }: { item: PortfolioItem }) {
+export function PortfolioCard({ item, revealDelay: step = 0 }: { item: PortfolioItem; revealDelay?: number }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white shadow-[var(--shadow-card)] transition-shadow duration-300 hover:shadow-[var(--shadow-card-hover)]">
+    <article
+      style={revealDelay(step)}
+      className="glow-card lift reveal group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white shadow-[var(--shadow-card)]"
+    >
       <div className="relative aspect-[16/10] overflow-hidden">
-        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.06]">
           <PortfolioThumb item={item} />
         </div>
         {item.isDemo && (

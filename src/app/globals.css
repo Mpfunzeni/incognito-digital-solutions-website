@@ -102,6 +102,311 @@
   }
 }
 
+/*
+ * Cinematic motion system. Everything here is decorative and CSS-only:
+ * no JavaScript runs for it, content is never hidden when a browser lacks
+ * support, and it all switches off for people who prefer reduced motion.
+ */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, -8%, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-6%, 6%, 0) scale(0.95);
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(6deg);
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+@keyframes grid-pan {
+  to {
+    background-position: 56px 56px;
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes grow-up {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(30 221 214 / 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgb(30 221 214 / 0);
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Soft, drifting colour fields behind dark sections. */
+.aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora > span {
+  position: absolute;
+  width: 55vmax;
+  height: 55vmax;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.32;
+  will-change: transform;
+}
+.aurora > span:nth-child(1) {
+  top: -25%;
+  right: -15%;
+  background: var(--color-brand-teal);
+}
+.aurora > span:nth-child(2) {
+  bottom: -35%;
+  left: -20%;
+  background: var(--color-brand-purple);
+  opacity: 0.28;
+}
+.aurora > span:nth-child(3) {
+  top: -30%;
+  left: 25%;
+  width: 35vmax;
+  height: 35vmax;
+  background: var(--color-brand-orange);
+  opacity: 0.16;
+}
+.aurora > span:nth-child(4) {
+  bottom: -30%;
+  right: 20%;
+  width: 30vmax;
+  height: 30vmax;
+  background: var(--color-brand-pink);
+  opacity: 0.14;
+}
+
+/* Film grain and vignette for a cinematic finish. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+.vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -6;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgb(3 8 14 / 0.65));
+}
+
+.text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-brand-teal) 0%,
+    #7fe9e4 20%,
+    var(--color-brand-purple) 40%,
+    var(--color-brand-pink) 60%,
+    #7fe9e4 80%,
+    var(--color-brand-teal) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Gradient border that lights up on hover. */
+.glow-card {
+  position: relative;
+}
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-teal),
+    var(--color-brand-purple),
+    var(--color-brand-pink),
+    var(--color-brand-orange)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.glow-card:hover::before,
+.glow-card:focus-within::before {
+  opacity: 1;
+}
+.glow-card:hover {
+  box-shadow:
+    0 24px 48px -20px rgb(15 31 46 / 0.35),
+    0 0 40px -12px rgb(30 221 214 / 0.45);
+}
+
+/* Rotating light behind the call-to-action panel. */
+.halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -10;
+  width: 160%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgb(30 221 214 / 0.35) 60deg,
+    transparent 120deg,
+    rgb(171 120 255 / 0.3) 200deg,
+    transparent 260deg,
+    rgb(255 56 115 / 0.25) 320deg,
+    transparent 360deg
+  );
+  filter: blur(40px);
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aurora > span:nth-child(1) {
+    animation: aurora-drift 22s ease-in-out infinite alternate;
+  }
+  .aurora > span:nth-child(2) {
+    animation: aurora-drift 28s ease-in-out -8s infinite alternate-reverse;
+  }
+  .aurora > span:nth-child(3) {
+    animation: aurora-drift 18s ease-in-out -4s infinite alternate;
+  }
+  .aurora > span:nth-child(4) {
+    animation: aurora-drift 24s ease-in-out -12s infinite alternate-reverse;
+  }
+  .text-shimmer {
+    animation: shimmer 8s linear infinite;
+  }
+  .grid-pan {
+    animation: grid-pan 6s linear infinite;
+  }
+  .float {
+    animation: float-y 7s ease-in-out infinite;
+  }
+  .bob {
+    animation: bob 5s ease-in-out infinite;
+  }
+  .halo {
+    animation: spin-slow 18s linear infinite;
+  }
+  .marquee-track {
+    animation: marquee 40s linear infinite;
+  }
+  .marquee-mask:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .rise-in {
+    animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .grow-up {
+    transform-origin: bottom;
+    animation: grow-up 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .pulse-dot {
+    animation: pulse-ring 1.8s ease-out infinite;
+  }
+  /* Uses `translate` so it never fights the reveal animation's `transform`. */
+  .lift {
+    transition:
+      translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.35s ease;
+  }
+  .lift:hover {
+    translate: 0 -6px;
+  }
+
+  /*
+   * Scroll reveal. RevealObserver adds .reveal-ready to <html> once it is
+   * running, so without JavaScript nothing is ever hidden. Elements play a
+   * short, time-based entrance when they first scroll into view, so text is
+   * never left half-faded while someone is reading.
+   */
+  .reveal-ready .reveal:not(.is-visible) {
+    opacity: 0;
+  }
+  .reveal-ready .reveal.is-visible.is-animated {
+    animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--reveal-delay, 0) * 110ms);
+  }
+}
+
 /* Article typography for Markdown content. */
 .prose-article {
   color: var(--color-text);

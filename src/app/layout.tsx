@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@/components/layout/Analytics";
 import { ConsentBanner } from "@/components/layout/ConsentBanner";
+import { RevealObserver } from "@/components/layout/RevealObserver";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { allowIndexing, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <RevealObserver />
         <ConsentBanner />
         <Analytics />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />

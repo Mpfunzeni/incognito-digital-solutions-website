@@ -13,6 +13,8 @@ import { Icon } from "@/components/ui/Icon";
 import { FaqList } from "@/components/ui/FaqList";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { HeroVisual } from "@/components/sections/HeroVisual";
+import { ServiceMarquee } from "@/components/sections/ServiceMarquee";
+import { Aurora } from "@/components/ui/Aurora";
 import { ServiceCard } from "@/components/sections/ServiceCard";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { PricingCard } from "@/components/sections/PricingCard";
@@ -20,6 +22,7 @@ import { PortfolioCard } from "@/components/sections/PortfolioCard";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { faqJsonLd, pageMetadata } from "@/lib/seo";
+import { revealDelay } from "@/lib/motion";
 
 export const metadata = pageMetadata({
   title: `${site.name} | Websites, SEO, Hosting and Branding`,
@@ -32,24 +35,21 @@ export default function HomePage() {
   return (
     <>
       {/* A: Hero */}
-      <section className="on-dark relative isolate overflow-hidden bg-ink-900">
+      <section className="on-dark grain vignette relative isolate overflow-hidden bg-ink-900">
+        <Aurora />
         <div
-          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_80%_at_85%_20%,rgb(30_221_214/0.22),transparent_60%),radial-gradient(45%_60%_at_5%_90%,rgb(171_120_255/0.18),transparent_60%),radial-gradient(35%_45%_at_40%_0%,rgb(254_103_64/0.12),transparent_60%)]"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-0 -z-10 opacity-[0.07] [background-image:linear-gradient(rgb(255_255_255)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
+          className="grid-pan absolute inset-0 -z-10 opacity-[0.07] [background-image:linear-gradient(rgb(255_255_255)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
           aria-hidden="true"
         />
         <Container className="grid items-center gap-16 py-20 sm:py-24 lg:grid-cols-[1.1fr_1fr] lg:py-28">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-slate-200">
-              <span className="size-2 rounded-full bg-brand-teal" aria-hidden="true" />
+            <p className="rise-in inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-slate-200 backdrop-blur">
+              <span className="pulse-dot size-2 rounded-full bg-brand-teal" aria-hidden="true" />
               South African digital solutions company
             </p>
             <h1 className="mt-6 text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl">
               Digital Solutions That{" "}
-              <span className="bg-gradient-to-r from-brand-teal via-[#7fe9e4] to-brand-purple bg-clip-text text-transparent">
+              <span className="text-shimmer">
                 Move Your Business
               </span>{" "}
               Forward.
@@ -58,7 +58,7 @@ export default function HomePage() {
               From high-performing websites and search engine optimisation to e-commerce, hosting and branding,
               Incognito Digital Solutions helps businesses establish a stronger digital presence.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="rise-in mt-9 flex flex-col gap-3 [animation-delay:300ms] sm:flex-row">
               <ButtonLink href="/get-a-quote" size="lg" track="cta_get_quote_hero">
                 Get a Quote <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
@@ -66,7 +66,7 @@ export default function HomePage() {
                 Explore Our Services
               </ButtonLink>
             </div>
-            <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300">
+            <ul className="rise-in mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300 [animation-delay:450ms]">
               {["Websites and e-commerce", "SEO and hosting", "Branding and support"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-brand-teal" aria-hidden="true" />
@@ -75,11 +75,12 @@ export default function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="px-4 motion-safe:animate-fade-up sm:px-8 lg:px-0">
+          <div className="rise-in px-4 [animation-delay:200ms] sm:px-8 lg:px-0">
             <HeroVisual />
           </div>
         </Container>
       </section>
+      <ServiceMarquee />
 
       {/* B: Value proposition */}
       <section aria-labelledby="value-heading" className="border-b border-line bg-white py-16 sm:py-20">
@@ -88,9 +89,9 @@ export default function HomePage() {
             What we offer
           </h2>
           <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
-            {valueProps.map((v) => (
-              <li key={v.title}>
-                <span className="grid size-11 place-items-center rounded-xl bg-ink-900 text-brand-teal">
+            {valueProps.map((v, i) => (
+              <li key={v.title} className="reveal" style={revealDelay(i)}>
+                <span className="grid size-11 place-items-center rounded-xl bg-ink-900 text-brand-teal shadow-[0_0_24px_-6px_rgb(30_221_214/0.7)]">
                   <Icon name={v.icon} className="size-5" />
                 </span>
                 <h3 className="mt-4 font-sans text-base font-bold tracking-normal text-ink-900">{v.title}</h3>
@@ -116,8 +117,8 @@ export default function HomePage() {
             </ButtonLink>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {publishedServices.map((s) => (
-              <ServiceCard key={s.slug} service={s} />
+            {publishedServices.map((s, i) => (
+              <ServiceCard key={s.slug} service={s} revealDelay={i % 3} />
             ))}
           </div>
         </Container>
@@ -144,7 +145,11 @@ export default function HomePage() {
           </div>
           <ul className="grid gap-5 sm:grid-cols-2">
             {differentiators.map((d, i) => (
-              <li key={d.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6 shadow-[var(--shadow-card)]">
+              <li
+                key={d.title}
+                className="glow-card lift reveal rounded-[var(--radius-card)] border border-line bg-white p-6 shadow-[var(--shadow-card)]"
+                style={revealDelay(i % 2)}
+              >
                 <span
                   className={`block h-1.5 w-10 rounded-full ${["bg-brand-teal", "bg-brand-orange", "bg-brand-pink", "bg-brand-purple"][i % 4]}`}
                   aria-hidden="true"
@@ -158,7 +163,8 @@ export default function HomePage() {
       </section>
 
       {/* E: Process */}
-      <section aria-labelledby="process-heading" className="on-dark bg-ink-900 py-20 sm:py-28">
+      <section aria-labelledby="process-heading" className="on-dark grain relative isolate overflow-hidden bg-ink-900 py-20 sm:py-28">
+        <Aurora />
         <Container>
           <SectionHeading
             id="process-heading"
@@ -189,8 +195,8 @@ export default function HomePage() {
             </ButtonLink>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {portfolio.slice(0, 3).map((p) => (
-              <PortfolioCard key={p.slug} item={p} />
+            {portfolio.slice(0, 3).map((p, i) => (
+              <PortfolioCard key={p.slug} item={p} revealDelay={i} />
             ))}
           </div>
         </Container>
@@ -207,8 +213,8 @@ export default function HomePage() {
             description="Every business is different, so each package is quoted to your scope. Your quotation lists everything included, plus any recurring fees."
           />
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {packages.slice(0, 3).map((p) => (
-              <PricingCard key={p.id} pkg={p} />
+            {packages.slice(0, 3).map((p, i) => (
+              <PricingCard key={p.id} pkg={p} revealDelay={i} />
             ))}
           </div>
           <p className="mt-10 text-center">

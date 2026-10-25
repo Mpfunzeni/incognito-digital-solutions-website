@@ -1,3 +1,5 @@
+import { revealDelay } from "@/lib/motion";
+
 type Step = { title: string; description: string };
 
 const colors = ["bg-brand-teal", "bg-brand-orange", "bg-brand-pink", "bg-brand-purple", "bg-brand-teal"];
@@ -11,8 +13,11 @@ export function ProcessSteps({ steps, tone = "dark" }: { steps: readonly Step[];
       {steps.map((step, i) => (
         <li
           key={step.title}
-          className={`relative rounded-[var(--radius-card)] p-6 ${
-            dark ? "border border-white/10 bg-white/[0.04]" : "border border-line bg-white shadow-[var(--shadow-card)]"
+          style={revealDelay(i)}
+          className={`glow-card lift reveal relative rounded-[var(--radius-card)] p-6 ${
+            dark
+              ? "border border-white/10 bg-white/[0.04] backdrop-blur-sm"
+              : "border border-line bg-white shadow-[var(--shadow-card)]"
           }`}
         >
           <div className="flex items-center gap-3">
@@ -23,7 +28,10 @@ export function ProcessSteps({ steps, tone = "dark" }: { steps: readonly Step[];
               {i + 1}
             </span>
             {i < steps.length - 1 && (
-              <span className={`hidden h-px flex-1 lg:block ${dark ? "bg-white/15" : "bg-line"}`} aria-hidden="true" />
+              <span
+                className={`hidden h-px flex-1 bg-gradient-to-r lg:block ${dark ? "from-white/40 to-white/0" : "from-line to-transparent"}`}
+                aria-hidden="true"
+              />
             )}
           </div>
           <h3 className={`mt-5 text-lg font-bold ${dark ? "text-white" : "text-ink-900"}`}>
