@@ -15,7 +15,8 @@ const csp = [
   "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
-  "form-action 'self'",
+  // PayFast checkout is a form post to PayFast's payment page.
+  "form-action 'self' https://www.payfast.co.za https://sandbox.payfast.co.za",
   "object-src 'none'",
   ...(isDev ? [] : ["upgrade-insecure-requests"]),
 ].join("; ");
@@ -39,6 +40,8 @@ const allowIndexing =
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Database drivers run on the server only and are not bundled.
+  serverExternalPackages: ["postgres", "@electric-sql/pglite"],
   trailingSlash: false,
   images: {
     formats: ["image/avif", "image/webp"],

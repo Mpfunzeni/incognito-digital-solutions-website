@@ -56,6 +56,7 @@ export const mainNav = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Hosting", href: "/hosting" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/blog" },

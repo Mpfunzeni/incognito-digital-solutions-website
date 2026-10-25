@@ -2,7 +2,7 @@
 
 Marketing and lead-generation website for **Incognito Digital Solutions**, a South African digital solutions company.
 
-Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4. All public pages are statically generated; the only server code is the quote form endpoint.
+Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4. All marketing pages are statically generated. Server code covers the quote form endpoint and the hosting system (customer accounts, orders, invoices and payments).
 
 ## Quick start
 
@@ -101,6 +101,34 @@ Delivery modes (`QUOTE_DELIVERY`):
 - unset: every submission fails safely with the error message.
 
 The rate limiter is in-memory, so on serverless/multi-instance hosting each instance counts separately. For stronger protection, back it with Upstash Redis or similar (`src/lib/rate-limit.ts`). Enquiries are not stored in a database; add one (for example Supabase with row-level security) only if you need a record beyond email.
+
+## Hosting system
+
+Customers can buy web hosting online at `/hosting`:
+
+1. **Plans** (`/hosting`): plan cards with a monthly/yearly switch, comparison table and domain prices. Plans, prices and domain prices live in `src/content/hosting.ts`.
+2. **Order** (`/hosting/order`): the customer creates an account (or logs in), picks a plan, billing period and domain (register, transfer or use an existing one) and sees the total update live. The server always recalculates the price from `src/content/hosting.ts`.
+3. **Invoice and payment** (`/account/invoices/[id]`): pay online through PayFast (card, Instant EFT and more) or by bank EFT. PayFast confirms payments to `/api/payments/payfast/notify`; the handler checks the signature, merchant ID, PayFast's own confirmation and the amount before marking the invoice paid.
+4. **Set-up**: when the first invoice is paid, the service moves to "Setting up". With `HOSTING_PROVISIONING=whm` the cPanel account is created automatically through the WHM API of a reseller account, and the customer gets a one-click "Open cPanel" button. Otherwise you are emailed to create the account and mark it active in the admin area.
+5. **Renewals**: a daily job (`vercel.json` → `/api/cron/renewals`) creates renewal invoices 14 days before each renewal date and emails them. Paying a renewal extends the service by one billing period.
+
+**Client area** (`/account`): overview, hosting services, invoices, profile (contact and billing details, VAT number, password change), password reset by email, and log out. Sessions are random tokens in an HttpOnly cookie; only their SHA-256 hash is stored. Passwords are hashed with scrypt. Log-in, sign-up and reset are rate limited.
+
+**Admin** (`/account/admin`, for emails listed in `HOSTING_ADMIN_EMAILS`): unpaid invoices (mark paid for EFT, cancel), all hosting services (set status and cPanel username), customers, and a button to create due renewal invoices.
+
+**Going live checklist**
+
+1. Create a Postgres database (Vercel → Storage → Neon, free tier) and set `DATABASE_URL`. Tables are created automatically.
+2. Set `HOSTING_ADMIN_EMAILS`, then sign up with that email to get admin access.
+3. Set `QUOTE_DELIVERY=resend` and the Resend variables so account emails are sent.
+4. Test with `PAYFAST_MODE=sandbox`, then switch to `live` with your PayFast merchant ID, key and passphrase.
+5. Add your banking details (`NEXT_PUBLIC_EFT_*`) for EFT payments.
+6. For automatic set-up, create matching packages in WHM (names in `whmPackage` in `src/content/hosting.ts`), add a WHM API token and set `HOSTING_PROVISIONING=whm`.
+7. Set `CRON_SECRET` so the daily renewal job can run.
+
+Domain registration and transfers are recorded on the order and emailed to the admin to complete at the registrar.
+
+Local development needs no database: without `DATABASE_URL` an in-process Postgres (PGlite) is used. Emails print to the terminal.
 
 ## Analytics
 

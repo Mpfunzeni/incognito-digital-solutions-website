@@ -90,6 +90,11 @@ export function Footer() {
                   Get a Quote
                 </Link>
               </li>
+              <li>
+                <Link href="/account" className="hover:text-ink-900">
+                  Client Login
+                </Link>
+              </li>
             </ul>
           </div>
 
