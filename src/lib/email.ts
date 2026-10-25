@@ -24,6 +24,7 @@ export function buildQuoteEmail(q: QuoteInput) {
     ["Email", q.email],
     ["Phone", q.phone || "Not provided"],
     ["Service required", q.service],
+    ["Selected package", q.selection || "None selected"],
     ["Budget range", q.budget || "Not provided"],
     ["Preferred contact method", q.contactMethod],
   ];

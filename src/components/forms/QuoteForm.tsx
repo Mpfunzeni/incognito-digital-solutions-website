@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 import {
+  budgetForAmount,
   budgetOptions,
   contactMethods,
   quoteSchema,
@@ -13,6 +14,7 @@ import {
 } from "@/lib/quote-schema";
 import { packages } from "@/content/pricing";
 import { publishedServices } from "@/content/services";
+import { describeSelection, resolveSelection, selectionTotals } from "@/content/service-pricing";
 import { site } from "@/content/site";
 import { trackEvent } from "@/lib/analytics";
 
@@ -62,12 +64,20 @@ export function QuoteForm({ source = "quote" }: { source?: "quote" | "contact" }
     const pkg = packages.find((p) => p.id === params.get("package"));
     let preset: string | undefined;
     if (service && (serviceOptions as readonly string[]).includes(service)) preset = service;
-    if (pkg) {
-      preset = publishedServices.find((s) => s.slug === pkg.serviceSlug)?.title;
+    let budget: string | undefined;
+    const selection = resolveSelection(params.get("tier"), params.get("addons"));
+    if (selection) {
+      preset = publishedServices.find((s) => s.slug === selection.pricing.slug)?.title;
+      const onceOff = selectionTotals(selection)["once-off"];
+      if (onceOff > 0) budget = budgetForAmount(onceOff);
       // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPackageNote(describeSelection(selection));
+    } else if (pkg) {
+      preset = publishedServices.find((s) => s.slug === pkg.serviceSlug)?.title;
       setPackageNote(pkg.name);
     }
-    if (preset) setValues((v) => ({ ...v, service: preset }));
+    if (preset || budget)
+      setValues((v) => ({ ...v, ...(preset && { service: preset }), ...(budget && { budget }) }));
   }, []);
 
   const set = <K extends keyof Values>(key: K, value: Values[K]) => {
@@ -79,12 +89,8 @@ export function QuoteForm({ source = "quote" }: { source?: "quote" | "contact" }
     e.preventDefault();
     if (status.state === "submitting") return;
 
-    const payload = {
-      ...values,
-      message: packageNote ? `[Package: ${packageNote}]\n${values.message}` : values.message,
-      startedAt,
-    };
-    const parsed = quoteSchema.safeParse({ ...payload, message: values.message });
+    const payload = { ...values, selection: packageNote ?? "", startedAt };
+    const parsed = quoteSchema.safeParse(payload);
     if (!parsed.success) {
       const fe = toFieldErrors(parsed.error);
       setErrors(fe);
@@ -168,7 +174,14 @@ export function QuoteForm({ source = "quote" }: { source?: "quote" | "contact" }
 
       {packageNote && (
         <p className="rounded-xl bg-surface-muted px-4 py-3 text-sm text-ink-700">
-          Requesting a quote for the <strong>{packageNote}</strong> package.
+          Selected package: <strong>{packageNote}</strong>.{" "}
+          <button
+            type="button"
+            onClick={() => setPackageNote(null)}
+            className="font-semibold text-brand-teal-dark underline underline-offset-2"
+          >
+            Remove
+          </button>
         </p>
       )}
 

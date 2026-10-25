@@ -35,6 +35,8 @@ export const quoteSchema = z
       .refine((v) => !v || phoneRegex.test(v), "Please enter a valid phone number."),
     service: z.enum(serviceOptions, { error: "Please choose the service you need." }),
     budget: z.enum(budgetOptions).optional().or(z.literal("")),
+    /** Package chosen on a service page or the pricing page, e.g. "Business + Logo design (estimated from …)". */
+    selection: z.string().trim().max(500, "Package selection is too long.").optional().or(z.literal("")),
     message: z
       .string()
       .trim()
@@ -63,6 +65,16 @@ export function toFieldErrors(error: z.ZodError): FieldErrors {
     if (key && !out[key]) out[key] = issue.message;
   }
   return out;
+}
+
+/** Maps an estimated once-off amount in ZAR to the closest budget option. */
+export function budgetForAmount(amount: number): (typeof budgetOptions)[number] {
+  if (amount <= 0) return "Not sure yet";
+  if (amount < 5000) return "Under R5 000";
+  if (amount < 15000) return "R5 000 – R15 000";
+  if (amount < 30000) return "R15 000 – R30 000";
+  if (amount < 60000) return "R30 000 – R60 000";
+  return "Over R60 000";
 }
 
 /** Minimum time (ms) between rendering the form and submitting it. Bots tend to submit instantly. */

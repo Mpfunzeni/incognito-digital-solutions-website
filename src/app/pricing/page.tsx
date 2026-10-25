@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { packages } from "@/content/pricing";
+import { publishedServices } from "@/content/services";
+import { getServicePricing } from "@/content/service-pricing";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FaqList } from "@/components/ui/FaqList";
 import { PageHero } from "@/components/sections/PageHero";
-import { PricingCard } from "@/components/sections/PricingCard";
+import { PricingExplorer } from "@/components/sections/PricingExplorer";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { pageMetadata } from "@/lib/seo";
 
@@ -17,9 +18,9 @@ export const metadata = pageMetadata({
 
 const pricingFaqs = [
   {
-    question: "Why don't you list fixed prices?",
+    question: "Are these the final prices?",
     answer:
-      "Projects vary widely in scope. Rather than a one-size price that may not fit, we quote each project based on what you actually need, and list every once-off and recurring cost clearly.",
+      "The prices shown are starting prices in South African Rand, excluding VAT. Projects vary in scope, so once you send us your selection we confirm the exact price in a written quotation that lists every once-off and recurring cost.",
   },
   {
     question: "Which costs are recurring?",
@@ -43,19 +44,19 @@ export default function PricingPage() {
     <>
       <PageHero
         eyebrow="Pricing"
-        title="Packages built around your business"
-        intro="Every package is quoted to your requirements. Here is what each one includes, what it does not, and which costs recur, so you can compare options with confidence."
+        title="Packages and prices"
+        intro="Choose a service, compare packages, add any extras and see an instant estimate. Send your selection to us and we will confirm a tailored quotation."
         crumbs={[{ name: "Pricing", path: "/pricing" }]}
       />
       <section aria-label="Packages" className="bg-surface-muted py-20 sm:py-24">
         <Container>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {packages.map((p) => (
-              <PricingCard key={p.id} pkg={p} />
-            ))}
-          </div>
+          <PricingExplorer
+            items={publishedServices
+              .filter((svc) => getServicePricing(svc.slug))
+              .map(({ slug, title, shortTitle }) => ({ slug, title, shortTitle }))}
+          />
           <p className="mx-auto mt-10 max-w-2xl text-center text-sm text-text-muted">
-            All quotations are in South African Rand. Third-party fees, such as domain registry, platform and payment
+            All prices are starting prices in South African Rand, excluding VAT. Third-party fees, such as domain registry, platform and payment
             provider fees, are charged by those providers and are listed separately. Not sure which package fits?{" "}
             <Link href="/contact" className="font-semibold text-brand-teal-dark underline underline-offset-2">
               Ask us

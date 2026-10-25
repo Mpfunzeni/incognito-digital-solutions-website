@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRight, Check, CircleDollarSign, Users } from "lucide-react";
 import { getService, publishedServices } from "@/content/services";
+import { formatRand, getServicePricing } from "@/content/service-pricing";
 import { site, absoluteUrl } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
@@ -11,6 +12,7 @@ import { FaqList } from "@/components/ui/FaqList";
 import { Icon, accentClasses } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { PageHero } from "@/components/sections/PageHero";
+import { PackagePicker } from "@/components/sections/PackagePicker";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { faqJsonLd, pageMetadata } from "@/lib/seo";
@@ -36,6 +38,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   const a = accentClasses[service.accent];
   const related = service.related.map(getService).filter((s) => s !== undefined);
   const quoteHref = `/get-a-quote?service=${encodeURIComponent(service.title)}`;
+  const pricing = getServicePricing(service.slug);
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -46,6 +49,21 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
     url: absoluteUrl(`/services/${service.slug}`),
     provider: { "@id": `${site.url}/#organization` },
     areaServed: { "@type": "Country", name: site.areaServed },
+    ...(pricing && {
+      offers: pricing.tiers.map((t) => ({
+        "@type": "Offer",
+        name: `${service.shortTitle}: ${t.name}`,
+        priceCurrency: "ZAR",
+        price: t.from,
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          priceCurrency: "ZAR",
+          minPrice: t.from,
+          valueAddedTaxIncluded: false,
+          ...(t.billing !== "once-off" && { unitCode: t.billing === "monthly" ? "MON" : "ANN" }),
+        },
+      })),
+    }),
   };
 
   return (
@@ -63,9 +81,15 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           <ButtonLink href={quoteHref} size="lg" track={`cta_quote_service_hero_${service.slug}`}>
             Get a Quote <ArrowRight className="size-4" aria-hidden="true" />
           </ButtonLink>
-          <ButtonLink href="/contact" size="lg" variant="outline-light">
-            Talk to us
-          </ButtonLink>
+          {pricing ? (
+            <ButtonLink href="#pricing" size="lg" variant="outline-light">
+              View packages and prices
+            </ButtonLink>
+          ) : (
+            <ButtonLink href="/contact" size="lg" variant="outline-light">
+              Talk to us
+            </ButtonLink>
+          )}
         </div>
       </PageHero>
 
@@ -104,19 +128,35 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 ))}
               </ul>
               <Link
-                href={quoteHref}
+                href={pricing ? "#pricing" : quoteHref}
                 data-track={`cta_quote_service_pricing_${service.slug}`}
                 className="mt-5 inline-flex items-center gap-1.5 font-semibold text-brand-teal-dark hover:underline"
               >
-                Request a tailored quote <ArrowRight className="size-4" aria-hidden="true" />
+                {pricing ? "Compare packages below" : "Request a tailored quote"} <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
           </aside>
         </Container>
       </section>
 
+      {pricing && (
+        <section aria-labelledby="packages" className="scroll-mt-24 bg-surface-muted py-20 sm:py-24" id="pricing">
+          <Container>
+            <SectionHeading
+              id="packages"
+              eyebrow="Packages and pricing"
+              title={`Choose your ${service.shortTitle} package`}
+              description={`Packages start from ${formatRand(Math.min(...pricing.tiers.map((t) => t.from)))}. Pick the tier that fits, add any extras, and send the selection straight to us for a confirmed quotation.`}
+            />
+            <div className="mt-12">
+              <PackagePicker slug={service.slug} serviceTitle={service.title} />
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Deliverables */}
-      <section aria-labelledby="deliverables" className="bg-surface-muted py-20 sm:py-24">
+      <section aria-labelledby="deliverables" className="py-20 sm:py-24">
         <Container>
           <SectionHeading
             id="deliverables"

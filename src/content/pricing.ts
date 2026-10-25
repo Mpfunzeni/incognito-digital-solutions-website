@@ -1,8 +1,7 @@
 /**
- * Service packages. Prices are intentionally `null` until verified prices are
- * supplied: a null price renders as "Request a Quote". To publish a price,
- * set e.g. `price: { amount: 4500, prefix: "From", suffix: "once-off" }`.
- * Amounts are in South African Rand (ZAR).
+ * Summary packages shown on the homepage. Starting prices mirror the tiers in
+ * service-pricing.ts; keep the two in step. A null price renders as
+ * "Request a Quote". Amounts are in South African Rand (ZAR), excluding VAT.
  */
 
 export type Price = {
@@ -28,7 +27,7 @@ export const packages: Package[] = [
     id: "starter-website",
     name: "Starter Website",
     description: "A professional online presence for new and small businesses.",
-    price: null,
+    price: { amount: 4500, prefix: "From", suffix: "once-off" },
     features: [
       "Up to 5 pages (e.g. Home, About, Services, Contact)",
       "Responsive design for mobile, tablet and desktop",
@@ -45,7 +44,7 @@ export const packages: Package[] = [
     id: "business-website",
     name: "Business Website",
     description: "A larger website built to generate enquiries and grow with you.",
-    price: null,
+    price: { amount: 9500, prefix: "From", suffix: "once-off" },
     highlighted: true,
     features: [
       "Custom page structure for your services",
@@ -63,7 +62,7 @@ export const packages: Package[] = [
     id: "ecommerce-website",
     name: "E-commerce Website",
     description: "An online store with secure checkout and payment integration.",
-    price: null,
+    price: { amount: 12000, prefix: "From", suffix: "once-off" },
     features: [
       "Product and category pages",
       "Cart and checkout",
@@ -80,7 +79,7 @@ export const packages: Package[] = [
     id: "seo-services",
     name: "SEO Services",
     description: "Technical and on-page work to improve search visibility.",
-    price: null,
+    price: { amount: 2500, prefix: "From", suffix: "/month" },
     features: [
       "Technical SEO audit",
       "Keyword and search intent research",
@@ -97,7 +96,7 @@ export const packages: Package[] = [
     id: "hosting-maintenance",
     name: "Hosting and Maintenance",
     description: "Reliable hosting with ongoing updates, backups and support.",
-    price: null,
+    price: { amount: 99, prefix: "From", suffix: "/month" },
     features: [
       "Managed hosting set-up",
       "Domain and SSL management",
