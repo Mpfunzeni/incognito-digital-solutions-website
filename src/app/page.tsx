@@ -27,7 +27,7 @@ import { revealDelay } from "@/lib/motion";
 export const metadata = pageMetadata({
   title: `${site.name} | Websites, SEO, Hosting and Branding`,
   description:
-    "South African digital solutions company offering website design and development, SEO, e-commerce, web hosting and domains, branding and ongoing technical support. Request a quote.",
+    "South African digital solutions company offering website design and development, mobile and app development, SEO, e-commerce, web hosting and domains, branding and ongoing technical support. Request a quote.",
   path: "/",
 });
 
@@ -55,7 +55,7 @@ export default function HomePage() {
               Forward.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
-              From high-performing websites and search engine optimisation to e-commerce, hosting and branding,
+              From high-performing websites and mobile apps to search engine optimisation, e-commerce, hosting and branding,
               Incognito Digital Solutions helps businesses establish a stronger digital presence.
             </p>
             <div className="rise-in mt-9 flex flex-col gap-3 [animation-delay:300ms] sm:flex-row">
@@ -67,7 +67,7 @@ export default function HomePage() {
               </ButtonLink>
             </div>
             <ul className="rise-in mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300 [animation-delay:450ms]">
-              {["Websites and e-commerce", "SEO and hosting", "Branding and support"].map((t) => (
+              {["Websites and mobile apps", "E-commerce and SEO", "Hosting, branding and support"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <CheckCircle2 className="size-4 text-brand-teal" aria-hidden="true" />
                   {t}

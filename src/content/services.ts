@@ -11,6 +11,7 @@ export type ServiceIcon =
   | "cart"
   | "palette"
   | "wrench"
+  | "smartphone"
   | "wallet";
 
 export type FAQ = { question: string; answer: string };
@@ -112,7 +113,89 @@ export const services: Service[] = [
           "You know your business best, so we usually work from information you supply. We can help structure and refine your copy so that it reads clearly and supports search visibility.",
       },
     ],
-    related: ["seo", "web-hosting-domains", "maintenance"],
+    related: ["seo", "mobile-app-development", "web-hosting-domains", "maintenance"],
+  },
+  {
+    slug: "mobile-app-development",
+    title: "Mobile and App Design and Development",
+    shortTitle: "Mobile Apps",
+    icon: "smartphone",
+    accent: "purple",
+    summary:
+      "Mobile, desktop and web apps designed and built for iOS, Android, Windows, macOS and the browser, from first idea to app store launch.",
+    benefits: ["iOS and Android apps", "Windows, macOS and web apps", "UI/UX design and prototypes"],
+    published: true,
+    seo: {
+      title: "Mobile App Development for iOS, Android and More",
+      description:
+        "App design and development for iOS, Android, Windows, macOS and the web. UX design, cross-platform builds, app store publishing and ongoing support for South African businesses.",
+    },
+    hero: {
+      heading: "Mobile and App Design and Development",
+      intro:
+        "Give your customers and team an app that works wherever they are. We design and build apps for iPhone and iPad, Android, Windows, macOS and the web, planned around what your users need to get done.",
+    },
+    overview: [
+      "A successful app starts with a clear purpose. Before anything is built, we work with you to define who the app is for, the problems it solves and the features that matter most for a first release.",
+      "We design every screen for its platform, so the app feels natural on an iPhone, an Android phone, a tablet or a desktop computer. Interactive prototypes let you try the experience and give feedback before development begins.",
+      "Depending on your goals and budget, we recommend either a cross-platform approach that shares one codebase across operating systems, or native development for apps that need deep device features. We explain the trade-offs plainly so you can choose with confidence.",
+    ],
+    deliverables: [
+      { title: "Discovery and app plan", description: "Goals, users, core features and a release plan agreed before design starts." },
+      { title: "UI/UX design and prototypes", description: "Platform-appropriate screen designs and a clickable prototype to test the flow." },
+      { title: "iOS and Android apps", description: "Apps for iPhone, iPad and Android phones and tablets, built cross-platform or native." },
+      { title: "Desktop and web apps", description: "Applications for Windows, macOS and the browser, including installable web apps (PWAs)." },
+      { title: "Back end and integrations", description: "User accounts, databases, notifications, payments and connections to your existing systems." },
+      { title: "Testing and app store publishing", description: "Testing on real devices, then submission to the Apple App Store and Google Play." },
+    ],
+    idealFor: [
+      "Businesses that want to serve customers through a mobile app",
+      "Companies replacing paperwork or spreadsheets with an internal app",
+      "Start-ups validating an app idea with a first version",
+      "Organisations that need one product across phones, tablets and desktop",
+    ],
+    process: [
+      { title: "Discovery", description: "We clarify your goals, users and the features for a first release." },
+      { title: "Design and prototype", description: "We design the screens and build a clickable prototype for feedback." },
+      { title: "Build", description: "We develop the app in stages and share working builds as we go." },
+      { title: "Test", description: "We test on real devices and operating system versions." },
+      { title: "Launch and support", description: "We publish to the app stores and keep the app updated and secure." },
+    ],
+    pricingFactors: [
+      "Which platforms are needed (iOS, Android, Windows, macOS, web)",
+      "Number of screens and the complexity of features",
+      "Back-end requirements such as user accounts, data storage and notifications",
+      "Integrations with payments or existing business systems",
+      "Ongoing maintenance and app store requirements",
+    ],
+    faqs: [
+      {
+        question: "Which operating systems can you build for?",
+        answer:
+          "We design and develop apps for iOS (iPhone and iPad), Android, Windows and macOS, as well as web apps that run in any modern browser. Many projects use one cross-platform codebase to cover several of these at once.",
+      },
+      {
+        question: "Should my app be native or cross-platform?",
+        answer:
+          "Cross-platform development usually reaches more devices for less cost and is a good fit for most business apps. Native development can be the better choice for apps that rely heavily on specific device features or performance. We recommend an approach after understanding your requirements.",
+      },
+      {
+        question: "Can you publish the app to the App Store and Google Play?",
+        answer:
+          "Yes. We prepare the store listings and handle submission and review. The app is published under your own Apple and Google developer accounts so that you own it.",
+      },
+      {
+        question: "Do you only design apps, or build them too?",
+        answer:
+          "Both. We can take an app from idea to launch, or provide design only, such as UX research, screen designs and prototypes for your own developers.",
+      },
+      {
+        question: "What happens after the app is launched?",
+        answer:
+          "Apps need updates to stay compatible with new operating system versions and to stay secure. We offer ongoing support and can add new features as your needs grow.",
+      },
+    ],
+    related: ["web-design", "ecommerce-development", "maintenance"],
   },
   {
     slug: "seo",

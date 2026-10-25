@@ -44,6 +44,7 @@ export default function AboutPage() {
             </p>
             <p>
               Our work covers <AboutLink href="/services/web-design">website design and development</AboutLink>,{" "}
+              <AboutLink href="/services/mobile-app-development">mobile and app development</AboutLink>,{" "}
               <AboutLink href="/services/seo">search engine optimisation</AboutLink>,{" "}
               <AboutLink href="/services/web-hosting-domains">hosting and domains</AboutLink>,{" "}
               <AboutLink href="/services/ecommerce-development">e-commerce</AboutLink>,{" "}

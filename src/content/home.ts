@@ -19,7 +19,7 @@ export const valueProps = [
   {
     icon: "layers",
     title: "Integrated digital services",
-    description: "Websites, hosting, domains, SEO and branding from one team, so everything works together.",
+    description: "Websites, apps, hosting, domains, SEO and branding from one team, so everything works together.",
   },
   {
     icon: "lifebuoy",

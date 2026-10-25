@@ -9,7 +9,7 @@ export const site = {
   url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.incognitodigitalsolutions.co.za").replace(/\/$/, ""),
   locale: "en_ZA",
   description:
-    "Incognito Digital Solutions is a South African digital solutions company offering website design and development, SEO, web hosting and domains, e-commerce, branding and ongoing technical support.",
+    "Incognito Digital Solutions is a South African digital solutions company offering website design and development, mobile and app development, SEO, web hosting and domains, e-commerce, branding and ongoing technical support.",
   tagline: "Digital Solutions That Move Your Business Forward.",
   country: "South Africa",
   areaServed: "South Africa",
