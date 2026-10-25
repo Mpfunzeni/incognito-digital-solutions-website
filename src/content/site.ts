@@ -6,7 +6,17 @@
 export const site = {
   name: "Incognito Digital Solutions",
   shortName: "Incognito",
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.incognitodigitalsolutions.co.za").replace(/\/$/, ""),
+  /**
+   * Canonical URL. NEXT_PUBLIC_SITE_URL wins; otherwise Vercel's production
+   * domain (the custom domain once connected, the vercel.app address before
+   * that), so canonicals and the sitemap always point at a site that works.
+   */
+  url: (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://www.incognitodigitalsolutions.co.za")
+  ).replace(/\/$/, ""),
   locale: "en_ZA",
   description:
     "Incognito Digital Solutions is a South African digital solutions company offering website design and development, mobile and app development, SEO, web hosting and domains, e-commerce, branding and ongoing technical support.",

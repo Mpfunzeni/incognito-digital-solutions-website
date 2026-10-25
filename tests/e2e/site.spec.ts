@@ -19,6 +19,9 @@ const pages = [
   "/get-a-quote",
   "/privacy-policy",
   "/terms-and-conditions",
+  "/locations",
+  "/locations/johannesburg",
+  "/locations/gqeberha",
 ];
 
 for (const path of pages) {

@@ -32,7 +32,10 @@ const securityHeaders = [
 
 // Indexing is only allowed on the production deployment. Every other
 // environment (preview, staging, local) sends a noindex header as a safety net.
-const allowIndexing = process.env.NEXT_PUBLIC_SITE_ENV === "production";
+// Mirrors allowIndexing in src/lib/seo.ts.
+const allowIndexing =
+  process.env.NEXT_PUBLIC_SITE_ENV === "production" ||
+  (!process.env.NEXT_PUBLIC_SITE_ENV && process.env.VERCEL_ENV === "production");
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
