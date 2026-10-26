@@ -8,30 +8,38 @@ import { site } from "@/content/site";
  * (smtp.gmail.com, 465); change them for another provider.
  */
 
+/** QUOTE_DELIVERY, forgiving stray spaces, quotes or capitals typed in Vercel. */
+export function deliveryMode(env: Record<string, string | undefined> = process.env) {
+  return (env.QUOTE_DELIVERY ?? "").trim().replace(/^["']|["']$/g, "").toLowerCase();
+}
+
 export function smtpConfigured(env: Record<string, string | undefined> = process.env) {
   return Boolean(env.SMTP_USER && env.SMTP_PASS);
 }
 
 /** The "From" line: SMTP_FROM if set, otherwise the site name and SMTP_USER. */
 export function smtpFrom(env: Record<string, string | undefined> = process.env) {
-  return env.SMTP_FROM || `${site.name} <${env.SMTP_USER}>`;
+  return env.SMTP_FROM || `${site.name} <${env.SMTP_USER?.trim()}>`;
 }
 
 type SmtpMail = { to: string[]; subject: string; text: string; html?: string; replyTo?: string; from?: string };
 
-export async function sendSmtp(mail: SmtpMail) {
+async function transport() {
   const { createTransport } = await import("nodemailer");
   const port = Number(process.env.SMTP_PORT || 465);
-  const transport = createTransport({
+  return createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
     port,
     secure: port === 465,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS?.replace(/\s+/g, "") },
+    auth: { user: process.env.SMTP_USER?.trim(), pass: process.env.SMTP_PASS?.replace(/\s+/g, "") },
     connectionTimeout: 10_000,
     greetingTimeout: 10_000,
     socketTimeout: 15_000,
   });
-  const info = await transport.sendMail({
+}
+
+export async function sendSmtp(mail: SmtpMail) {
+  const info = await (await transport()).sendMail({
     from: mail.from || smtpFrom(),
     to: mail.to,
     subject: mail.subject,
@@ -44,7 +52,29 @@ export async function sendSmtp(mail: SmtpMail) {
 
 /** Whether real emails go out (used by the admin page and the health check). */
 export function emailDeliveryEnabled(env: Record<string, string | undefined> = process.env) {
-  if (env.QUOTE_DELIVERY === "smtp") return smtpConfigured(env);
-  if (env.QUOTE_DELIVERY === "resend") return Boolean(env.RESEND_API_KEY);
+  if (deliveryMode(env) === "smtp") return smtpConfigured(env);
+  if (deliveryMode(env) === "resend") return Boolean(env.RESEND_API_KEY);
   return false;
+}
+
+/** Explains why Gmail would refuse to send, without revealing any settings. */
+const hints: Record<string, string> = {
+  EAUTH: "Gmail rejected the login. Check SMTP_USER is the full Gmail address and SMTP_PASS is a Google app password (not the normal Gmail password).",
+  ETIMEDOUT: "Could not reach the mail server in time.",
+  ECONNECTION: "Could not connect to the mail server.",
+  EDNS: "The mail server address (SMTP_HOST) could not be found.",
+};
+
+/** Logs in to the SMTP server without sending anything. */
+export async function checkSmtp(env: Record<string, string | undefined> = process.env) {
+  if (deliveryMode(env) !== "smtp") return { ok: false, problem: `QUOTE_DELIVERY is "${env.QUOTE_DELIVERY ?? ""}", it must be "smtp".` };
+  if (!env.SMTP_USER) return { ok: false, problem: "SMTP_USER is missing." };
+  if (!env.SMTP_PASS) return { ok: false, problem: "SMTP_PASS is missing." };
+  try {
+    await (await transport()).verify();
+    return { ok: true, problem: "" };
+  } catch (err) {
+    const code = String((err as { code?: string }).code ?? "");
+    return { ok: false, problem: hints[code] ?? `The mail server refused the connection (${code || "unknown error"}).` };
+  }
 }

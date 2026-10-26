@@ -1,6 +1,6 @@
 import "server-only";
 import type { QuoteInput } from "./quote-schema";
-import { sendSmtp, smtpConfigured } from "./smtp";
+import { deliveryMode, sendSmtp, smtpConfigured } from "./smtp";
 
 /**
  * Sends quote notifications. Supported delivery modes (QUOTE_DELIVERY):
@@ -41,7 +41,7 @@ export function buildQuoteEmail(q: QuoteInput) {
 }
 
 export async function deliverQuote(q: QuoteInput): Promise<DeliveryResult> {
-  const mode = process.env.QUOTE_DELIVERY;
+  const mode = deliveryMode();
   const { subject, text, html } = buildQuoteEmail(q);
 
   if (mode === "log" && process.env.NODE_ENV !== "production") {
