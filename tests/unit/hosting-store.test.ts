@@ -4,7 +4,9 @@ import {
   addCycle,
   cancelInvoice,
   createCustomer,
+  buildInvoiceEmail,
   createRenewalInvoices,
+  emailInvoice,
   findCustomerByEmail,
   listInvoices,
   listServices,
@@ -61,6 +63,18 @@ describe("hosting store", () => {
     const [inv] = await listInvoices(c.id);
     expect(inv.status).toBe("paid");
     expect(inv.payment_reference).toBe("PF1");
+  });
+
+  it("builds and sends an itemised invoice email", async () => {
+    const c = await newCustomer(`mail${run}@example.com`);
+    const invoice = await placeOrder(c, { planId: "starter", cycle: "monthly", domainAction: "register", domain: "mail<b>biz.co.za".replace("<b>", "") });
+    const mail = buildInvoiceEmail(invoice, { ...c, company: "A & B <Ltd>" }, "Thanks.");
+    expect(mail.subject).toContain(`INV-${invoice.number}`);
+    expect(mail.text).toContain("Total due: R 249.00");
+    expect(mail.text).toContain(`/account/invoices/${invoice.id}`);
+    expect(mail.html).toContain("A &amp; B &lt;Ltd&gt;");
+    expect(await emailInvoice(invoice.id)).toBe(true);
+    expect(await emailInvoice("missing")).toBe(false);
   });
 
   it("cancelling an unpaid new order cancels the service", async () => {

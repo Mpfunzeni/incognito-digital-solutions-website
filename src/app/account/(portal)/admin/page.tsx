@@ -4,6 +4,7 @@ import { cents, EmptyState, formatDate, PageTitle, Panel, StatusBadge } from "@/
 import { FormMessage } from "@/components/account/FormParts";
 import {
   adminCancelInvoiceAction,
+  adminEmailInvoiceAction,
   adminMarkPaidAction,
   adminRunRenewalsAction,
   adminUpdateServiceAction,
@@ -17,6 +18,7 @@ const doneMessages: Record<string, string> = {
   paid: "Invoice marked as paid.",
   cancelled: "Invoice cancelled.",
   service: "Service updated.",
+  emailed: "Invoice emailed to the customer.",
 };
 
 const smallInput = "h-9 rounded-lg border border-[#cbd5e1] bg-white px-2.5 text-sm text-ink-900";
@@ -28,6 +30,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
   const unpaid = invoices.filter((i) => i.status === "unpaid");
   const done = typeof sp.done === "string" ? (sp.done === "renewals" ? `${sp.count ?? 0} renewal invoice(s) created.` : doneMessages[sp.done]) : undefined;
   const payfast = payfastConfig();
+  const emailOn = process.env.QUOTE_DELIVERY === "resend" && Boolean(process.env.RESEND_API_KEY);
 
   return (
     <>
@@ -36,6 +39,17 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
         intro={`Payments: ${payfast ? `PayFast (${payfast.mode})` : "PayFast not set up"} · Account set-up: ${provisioningMode() === "whm" ? "automatic (WHM)" : "manual"}`}
       />
       {done && <div className="mb-6"><FormMessage ok message={done} /></div>}
+      {(sp.done === "email-failed" || !emailOn) && (
+        <div className="mb-6">
+          <FormMessage
+            message={
+              emailOn
+                ? "The invoice email could not be sent. Check the Resend settings and try again."
+                : "Email is not switched on yet, so invoices and alerts are not being sent. Add QUOTE_DELIVERY=resend, RESEND_API_KEY, QUOTE_FROM_EMAIL and QUOTE_TO_EMAIL in Vercel, then redeploy."
+            }
+          />
+        </div>
+      )}
 
       <Panel
         title={`Unpaid invoices (${unpaid.length})`}
@@ -70,6 +84,12 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
                     <input id={`ref-${i.id}`} name="reference" placeholder="EFT reference" className={`${smallInput} w-36`} />
                     <button type="submit" className={buttonClasses("primary", "sm", "h-9")}>
                       Mark paid
+                    </button>
+                  </form>
+                  <form action={adminEmailInvoiceAction}>
+                    <input type="hidden" name="invoiceId" value={i.id} />
+                    <button type="submit" className={buttonClasses("dark", "sm", "h-9")}>
+                      Email invoice
                     </button>
                   </form>
                   <form action={adminCancelInvoiceAction}>
