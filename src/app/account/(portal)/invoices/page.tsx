@@ -13,7 +13,7 @@ export default async function InvoicesPage() {
         <EmptyState>You do not have any invoices yet.</EmptyState>
       ) : (
         <div className="overflow-x-auto rounded-[var(--radius-card)] border border-line bg-white shadow-[var(--shadow-card)]">
-          <table className="w-full min-w-[36rem] text-left text-[0.95rem]">
+          <table className="w-full min-w-[40rem] text-left text-[0.95rem]">
             <thead className="border-b border-line bg-surface-muted text-sm text-text-muted">
               <tr>
                 <th scope="col" className="px-5 py-3 font-semibold">Invoice</th>
@@ -21,6 +21,7 @@ export default async function InvoicesPage() {
                 <th scope="col" className="px-5 py-3 font-semibold">Description</th>
                 <th scope="col" className="px-5 py-3 text-right font-semibold">Total</th>
                 <th scope="col" className="px-5 py-3 font-semibold">Status</th>
+                <th scope="col" className="px-5 py-3 font-semibold"><span className="sr-only">PDF</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -36,6 +37,11 @@ export default async function InvoicesPage() {
                   <td className="px-5 py-3.5 text-right font-semibold text-ink-900">{cents(i.total_cents)}</td>
                   <td className="px-5 py-3.5">
                     <StatusBadge status={i.status} />
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <a href={`/account/invoices/${i.id}/pdf`} className="text-sm font-semibold text-brand-teal-dark underline underline-offset-2">
+                      PDF<span className="sr-only"> of {invoiceNumber(i.number)}</span>
+                    </a>
                   </td>
                 </tr>
               ))}
