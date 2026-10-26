@@ -19,12 +19,17 @@ type Runner = { query<T extends Row>(text: string, params?: unknown[]): Promise<
 
 let runner: Promise<Runner> | null = null;
 
+/** Vercel's Neon and Postgres integrations set DATABASE_URL, POSTGRES_URL or both. */
+function databaseUrl() {
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+}
+
 export function isDatabaseConfigured() {
-  return Boolean(process.env.DATABASE_URL) || process.env.NODE_ENV !== "production";
+  return Boolean(databaseUrl()) || process.env.NODE_ENV !== "production";
 }
 
 async function connect(): Promise<Runner> {
-  const url = process.env.DATABASE_URL;
+  const url = databaseUrl();
   if (url) {
     const { default: postgres } = await import("postgres");
     const sql = postgres(url, { max: 5, idle_timeout: 20, prepare: false, onnotice: () => {} });
