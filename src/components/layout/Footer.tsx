@@ -4,7 +4,6 @@ import { Mail, Phone, Globe } from "lucide-react";
 import { mainNav, site, whatsappUrl } from "@/content/site";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { publishedServices } from "@/content/services";
-import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
 import { ConsentSettingsButton } from "@/components/layout/ConsentBanner";
 
@@ -142,24 +141,7 @@ export function Footer() {
           </div>
         </div>
 
-        <nav aria-labelledby="footer-areas" className="mt-14 border-t border-line pt-8">
-          <h3 id="footer-areas" className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-900">
-            <Link href="/locations" className="hover:text-brand-teal-dark">
-              Areas we serve
-            </Link>
-          </h3>
-          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            {locations.map((l) => (
-              <li key={l.slug}>
-                <Link href={`/locations/${l.slug}`} className="hover:text-ink-900">
-                  {l.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="mt-8 flex flex-col gap-4 border-t border-line pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-line pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.name}. All rights reserved.
           </p>

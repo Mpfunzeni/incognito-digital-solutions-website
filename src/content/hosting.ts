@@ -1,3 +1,5 @@
+import { formatZar } from "@/lib/money";
+
 /**
  * Web hosting plans and domain prices sold through the online hosting system.
  * Amounts are in South African Rand (ZAR), whole rand, excluding VAT. Monthly
@@ -117,12 +119,7 @@ export function priceOrder(input: { planId: string; cycle: BillingCycle; domainA
 }
 
 export function formatRand(amount: number, fractionDigits = 0) {
-  return new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency: "ZAR",
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(amount);
+  return formatZar(amount, fractionDigits);
 }
 
 /**

@@ -1,3 +1,5 @@
+import { formatZar } from "@/lib/money";
+
 /**
  * Summary packages shown on the homepage. Starting prices mirror the tiers in
  * service-pricing.ts; keep the two in step. A null price renders as
@@ -111,10 +113,6 @@ export const packages: Package[] = [
 ];
 
 export function formatPrice(price: Price) {
-  const amount = new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency: "ZAR",
-    maximumFractionDigits: 0,
-  }).format(price.amount);
+  const amount = formatZar(price.amount);
   return [price.prefix, amount].filter(Boolean).join(" ");
 }

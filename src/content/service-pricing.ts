@@ -1,3 +1,5 @@
+import { formatZar } from "@/lib/money";
+
 /**
  * Per-service price tiers and add-ons shown in the interactive package picker
  * on each /services/[slug] page and on /pricing. Amounts are starting prices
@@ -421,7 +423,7 @@ export const billingLabel: Record<Billing, string> = {
 };
 
 export function formatRand(amount: number) {
-  return new Intl.NumberFormat("en-ZA", { style: "currency", currency: "ZAR", maximumFractionDigits: 0 }).format(amount);
+  return formatZar(amount);
 }
 
 export type Selection = { pricing: ServicePricing; tier: Tier; addOns: AddOn[] };
