@@ -96,6 +96,7 @@ Flow: client-side validation → `POST /api/quote` → server-side validation wi
 
 Delivery modes (`QUOTE_DELIVERY`):
 
+- `smtp`: sends through an SMTP mailbox, e.g. Gmail with no domain needed. Requires `SMTP_USER` and `SMTP_PASS` (for Gmail, an [app password](https://myaccount.google.com/apppasswords)); `SMTP_HOST`/`SMTP_PORT` default to Gmail. Enquiries go to `QUOTE_TO_EMAIL` (or `SMTP_USER`), with the visitor's email as reply-to. Gmail allows about 500 emails a day.
 - `resend`: sends via the [Resend](https://resend.com) API. Requires `RESEND_API_KEY`, `QUOTE_TO_EMAIL` and `QUOTE_FROM_EMAIL` on a domain verified in Resend. The visitor's email is set as reply-to.
 - `log`: development only; prints enquiries to the terminal.
 - unset: every submission fails safely with the error message.
@@ -120,7 +121,7 @@ Customers can buy web hosting online at `/hosting`:
 
 1. Create a Postgres database (Vercel → Storage → Neon, free tier) and set `DATABASE_URL`. Tables are created automatically.
 2. Set `HOSTING_ADMIN_EMAILS`, then sign up with that email to get admin access.
-3. Set `QUOTE_DELIVERY=resend` and the Resend variables so account emails are sent.
+3. Set `QUOTE_DELIVERY=smtp` with `SMTP_USER`/`SMTP_PASS` (or `resend` and the Resend variables) so account emails are sent.
 4. Test with `PAYFAST_MODE=sandbox`, then switch to `live` with your PayFast merchant ID, key and passphrase.
 5. Add your banking details (`NEXT_PUBLIC_EFT_*`) for EFT payments.
 6. For automatic set-up, create matching packages in WHM (names in `whmPackage` in `src/content/hosting.ts`), add a WHM API token and set `HOSTING_PROVISIONING=whm`.
@@ -169,7 +170,7 @@ The site works on any Node.js host that supports Next.js. Vercel is the simplest
 
 1. Push this folder to a Git repository and import it in Vercel (framework preset: Next.js).
 2. Add the environment variables from `.env.example`. On the **Production** environment only, set `NEXT_PUBLIC_SITE_ENV=production`.
-3. Set `QUOTE_DELIVERY=resend` and the Resend variables, and verify the sending domain in Resend (DNS records).
+3. Set `QUOTE_DELIVERY=smtp` with a Gmail address and app password, or `resend` with the Resend variables and a verified sending domain.
 4. Add the domain `www.incognitodigitalsolutions.co.za` (and redirect the apex domain to it), then update DNS at the registrar.
 5. Submit a test enquiry on the live site and confirm the email arrives.
 

@@ -1,8 +1,12 @@
 import "server-only";
 import type { QuoteInput } from "./quote-schema";
+import { sendSmtp, smtpConfigured } from "./smtp";
 
 /**
  * Sends quote notifications. Supported delivery modes (QUOTE_DELIVERY):
+ *  - "smtp":   sends through an SMTP mailbox such as Gmail (SMTP_USER and
+ *              SMTP_PASS required; see src/lib/smtp.ts). Goes to
+ *              QUOTE_TO_EMAIL, or to SMTP_USER if that is not set.
  *  - "resend": sends through the Resend HTTP API (RESEND_API_KEY required).
  *  - "log":    development only. Prints the enquiry to the server log and
  *              reports success, so the form can be tested locally.
@@ -43,6 +47,21 @@ export async function deliverQuote(q: QuoteInput): Promise<DeliveryResult> {
   if (mode === "log" && process.env.NODE_ENV !== "production") {
     console.info(`[quote] (log mode, not emailed)\nSubject: ${subject}\n${text}`);
     return { ok: true };
+  }
+
+  if (mode === "smtp") {
+    if (!smtpConfigured()) {
+      console.error("[quote] SMTP delivery selected but SMTP_USER or SMTP_PASS is missing.");
+      return { ok: false, reason: "not_configured" };
+    }
+    const to = (process.env.QUOTE_TO_EMAIL || process.env.SMTP_USER!).split(",").map((s) => s.trim());
+    try {
+      const id = await sendSmtp({ to, replyTo: q.email, subject, text, html });
+      return { ok: true, id };
+    } catch (err) {
+      console.error("[quote] SMTP send failed", err);
+      return { ok: false, reason: "provider_error" };
+    }
   }
 
   if (mode === "resend") {

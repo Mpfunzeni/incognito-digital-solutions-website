@@ -1,10 +1,12 @@
 import "server-only";
 import { site } from "@/content/site";
+import { sendSmtp, smtpConfigured } from "@/lib/smtp";
 
 /**
  * Transactional email for the hosting system (welcome, password reset,
  * invoices, payment receipts and admin alerts). Uses the same delivery set-up
- * as the quote form: QUOTE_DELIVERY=resend with RESEND_API_KEY, or "log" in
+ * as the quote form: QUOTE_DELIVERY=smtp (e.g. Gmail), QUOTE_DELIVERY=resend
+ * with RESEND_API_KEY, or "log" in
  * development. Sending never throws; a failed email is logged and the
  * customer's action still completes.
  */
@@ -22,11 +24,39 @@ export function appUrl(path = "/") {
   return `${base}${path === "/" ? "" : path}`;
 }
 
+/**
+ * Where customer replies go: REPLY_TO_EMAIL if set; with SMTP the sending
+ * mailbox (it can receive, unlike a domain address with no mail host yet);
+ * otherwise the site's contact address.
+ */
+export function replyToAddress(env: Record<string, string | undefined> = process.env) {
+  if (env.REPLY_TO_EMAIL) return env.REPLY_TO_EMAIL;
+  if (env.QUOTE_DELIVERY === "smtp" && env.SMTP_USER) return env.SMTP_USER;
+  return site.contact.email;
+}
+
 export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
   const mode = process.env.QUOTE_DELIVERY;
   const recipients = (Array.isArray(to) ? to : to.split(",")).map((s) => s.trim()).filter(Boolean);
   if (recipients.length === 0) return false;
   const cleanSubject = subject.replace(/[\r\n]+/g, " ").slice(0, 200);
+
+  if (mode === "smtp" && smtpConfigured()) {
+    try {
+      await sendSmtp({
+        from: process.env.HOSTING_FROM_EMAIL || undefined,
+        to: recipients,
+        subject: cleanSubject,
+        text,
+        html,
+        replyTo: replyTo || replyToAddress(),
+      });
+      return true;
+    } catch (err) {
+      console.error("[hosting-mail] SMTP send failed", err);
+      return false;
+    }
+  }
 
   if (mode === "resend" && process.env.RESEND_API_KEY) {
     const from = process.env.HOSTING_FROM_EMAIL || process.env.QUOTE_FROM_EMAIL;
@@ -40,7 +70,7 @@ export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
           subject: cleanSubject,
           text,
           ...(html ? { html } : {}),
-          reply_to: replyTo || site.contact.email,
+          reply_to: replyTo || replyToAddress(),
         }),
         signal: AbortSignal.timeout(10_000),
       });
@@ -62,5 +92,5 @@ export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
 
 /** Where order and payment alerts go. */
 export function adminEmail() {
-  return process.env.HOSTING_ADMIN_EMAILS || process.env.QUOTE_TO_EMAIL || "";
+  return process.env.HOSTING_ADMIN_EMAILS || process.env.QUOTE_TO_EMAIL || process.env.SMTP_USER || "";
 }
