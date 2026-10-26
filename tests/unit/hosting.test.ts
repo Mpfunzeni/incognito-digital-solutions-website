@@ -150,3 +150,16 @@ describe("provisioning", () => {
     expect(usernameFromDomain("averyveryverylongdomainname.com", "1").endsWith("1")).toBe(true);
   });
 });
+
+describe("database URL", () => {
+  it("finds the connection string under the names Vercel integrations use", async () => {
+    const { databaseUrl } = await import("@/lib/hosting/db");
+    expect(databaseUrl({ DATABASE_URL: "postgres://a", POSTGRES_URL: "postgres://b" })).toBe("postgres://a");
+    expect(databaseUrl({ POSTGRES_URL: "postgres://b" })).toBe("postgres://b");
+    expect(
+      databaseUrl({ STORAGE_DATABASE_URL_UNPOOLED: "postgres://u", STORAGE_DATABASE_URL: "postgresql://p", OTHER_URL: "https://x" }),
+    ).toBe("postgresql://p");
+    expect(databaseUrl({ SOME_DATABASE_URL: "mysql://x" })).toBe("");
+    expect(databaseUrl({})).toBe("");
+  });
+});

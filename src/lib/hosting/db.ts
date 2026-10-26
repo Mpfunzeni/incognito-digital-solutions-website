@@ -19,9 +19,20 @@ type Runner = { query<T extends Row>(text: string, params?: unknown[]): Promise<
 
 let runner: Promise<Runner> | null = null;
 
-/** Vercel's Neon and Postgres integrations set DATABASE_URL, POSTGRES_URL or both. */
-function databaseUrl() {
-  return process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+/**
+ * Vercel's Neon and Postgres integrations set DATABASE_URL and/or POSTGRES_URL,
+ * sometimes with a custom prefix (e.g. STORAGE_DATABASE_URL). Exact names win,
+ * then any prefixed variant holding a postgres:// connection string.
+ */
+export function databaseUrl(env: Record<string, string | undefined> = process.env) {
+  if (env.DATABASE_URL) return env.DATABASE_URL;
+  if (env.POSTGRES_URL) return env.POSTGRES_URL;
+  for (const suffix of ["_DATABASE_URL", "_POSTGRES_URL"]) {
+    for (const [key, value] of Object.entries(env)) {
+      if (key.endsWith(suffix) && !key.includes("UNPOOLED") && value && /^postgres(ql)?:\/\//.test(value)) return value;
+    }
+  }
+  return "";
 }
 
 export function isDatabaseConfigured() {
