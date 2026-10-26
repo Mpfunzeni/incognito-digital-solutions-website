@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { ArrowRight, Check, MapPin } from "lucide-react";
 import { getLocation, locations } from "@/content/locations";
 import { getService, publishedServices } from "@/content/services";
-import { site, absoluteUrl } from "@/content/site";
+import { site, absoluteUrl, whatsappUrl } from "@/content/site";
 import { Container } from "@/components/ui/Container";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FaqList } from "@/components/ui/FaqList";
 import { Icon, accentClasses } from "@/components/ui/Icon";
@@ -92,6 +92,15 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
           <ButtonLink href={`tel:${site.contact.phoneE164}`} size="lg" variant="outline-light">
             Call {site.contact.phoneDisplay}
           </ButtonLink>
+          <a
+            href={whatsappUrl(`Hi ${site.name}, I'm in ${location.name} and I'd like to ask about your services.`)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClasses("outline-light", "lg")}
+            data-track={`whatsapp_location_${location.slug}`}
+          >
+            WhatsApp us
+          </a>
         </div>
       </PageHero>
 

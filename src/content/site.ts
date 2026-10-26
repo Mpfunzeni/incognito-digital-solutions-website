@@ -24,11 +24,13 @@ export const site = {
   country: "South Africa",
   areaServed: "South Africa",
   contact: {
-    phoneDisplay: "084 803 7471",
-    phoneE164: "+27848037471",
+    /** Calls only (no WhatsApp on this number). */
+    phoneDisplay: "061 316 8967",
+    phoneE164: "+27613168967",
     email: "info@incognitodigitalsolutions.co.za",
-    /** Set NEXT_PUBLIC_WHATSAPP_NUMBER (digits only, e.g. 27848037471) once the business WhatsApp number is verified. */
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
+    /** WhatsApp chat number (messages only). NEXT_PUBLIC_WHATSAPP_NUMBER (digits with country code) overrides it. */
+    whatsappDisplay: "084 803 7471",
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "27848037471",
   },
   /** Add verified profile URLs only. Empty entries are not rendered. */
   social: {
@@ -65,4 +67,9 @@ export const mainNav = [
 
 export function absoluteUrl(path = "/") {
   return `${site.url}${path === "/" ? "" : path}`;
+}
+
+/** A WhatsApp chat link, optionally with a message already typed for the customer. */
+export function whatsappUrl(message = `Hi ${site.name}, I'd like to ask about your services.`) {
+  return `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(message)}`;
 }

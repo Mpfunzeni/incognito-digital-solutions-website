@@ -1,5 +1,6 @@
 import { Clock, Mail, MessageSquareText, Phone } from "lucide-react";
-import { site } from "@/content/site";
+import { site, whatsappUrl } from "@/content/site";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/sections/PageHero";
 import { QuoteForm } from "@/components/forms/QuoteForm";
@@ -57,7 +58,12 @@ export default function QuotePage() {
               <ul className="mt-4 space-y-3">
                 <li>
                   <a href={`tel:${site.contact.phoneE164}`} className="flex items-center gap-3 hover:text-white">
-                    <Phone className="size-4 text-brand-teal" aria-hidden="true" /> {site.contact.phoneDisplay}
+                    <Phone className="size-4 text-brand-teal" aria-hidden="true" /> {site.contact.phoneDisplay} (calls)
+                  </a>
+                </li>
+                <li>
+                  <a href={whatsappUrl("Hi, I'd like a quote for ")} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-white">
+                    <WhatsAppIcon className="size-4 text-[#25D366]" /> WhatsApp {site.contact.whatsappDisplay}
                   </a>
                 </li>
                 <li>

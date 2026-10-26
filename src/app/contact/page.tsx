@@ -1,5 +1,5 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
-import { site } from "@/content/site";
+import { site, whatsappUrl } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/sections/PageHero";
 import { QuoteForm } from "@/components/forms/QuoteForm";
@@ -15,7 +15,7 @@ export default function ContactPage() {
   const methods = [
     {
       icon: Phone,
-      label: "Call us",
+      label: "Call us (calls only)",
       value: site.contact.phoneDisplay,
       href: `tel:${site.contact.phoneE164}`,
     },
@@ -25,16 +25,12 @@ export default function ContactPage() {
       value: site.contact.email,
       href: `mailto:${site.contact.email}`,
     },
-    ...(site.contact.whatsapp
-      ? [
-          {
-            icon: MessageCircle,
-            label: "WhatsApp us",
-            value: "Chat on WhatsApp",
-            href: `https://wa.me/${site.contact.whatsapp}`,
-          },
-        ]
-      : []),
+    {
+      icon: MessageCircle,
+      label: "WhatsApp us (messages)",
+      value: site.contact.whatsappDisplay,
+      href: whatsappUrl(),
+    },
   ];
 
   return (
@@ -42,7 +38,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Let's talk about your business"
-        intro="Call, email or send us a message. Tell us what you need and we will help you find the right digital solution."
+        intro="WhatsApp, call, email or send us a message. Tell us what you need and we will help you find the right digital solution."
         crumbs={[{ name: "Contact", path: "/contact" }]}
       />
       <section aria-label="Contact options" className="bg-surface-muted py-16 sm:py-20">

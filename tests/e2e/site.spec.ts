@@ -143,3 +143,13 @@ test("sitemap and robots are served", async ({ request }) => {
   expect(sitemap).toContain("/blog/");
   expect((await request.get("/robots.txt")).status()).toBe(200);
 });
+
+test.describe("whatsapp", () => {
+  test("floating button opens a WhatsApp chat on the WhatsApp number", async ({ page }) => {
+    await page.goto("/contact");
+    const button = page.getByRole("link", { name: /^Chat on WhatsApp/ });
+    await expect(button).toBeVisible();
+    await expect(button).toHaveAttribute("href", /^https:\/\/wa\.me\/27848037471\?text=/);
+    await expect(page.locator('a[href^="tel:"]').first()).toHaveAttribute("href", "tel:+27613168967");
+  });
+});

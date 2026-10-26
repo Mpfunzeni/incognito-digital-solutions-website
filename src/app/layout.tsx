@@ -4,6 +4,7 @@ import "./globals.css";
 import { site } from "@/content/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { Analytics } from "@/components/layout/Analytics";
 import { ConsentBanner } from "@/components/layout/ConsentBanner";
 import { RevealObserver } from "@/components/layout/RevealObserver";
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <WhatsAppButton />
         <RevealObserver />
         <ConsentBanner />
         <Analytics />
