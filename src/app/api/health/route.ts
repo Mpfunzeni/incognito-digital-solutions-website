@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { databaseUrl, query } from "@/lib/hosting/db";
+import { emailDeliveryEnabled } from "@/lib/smtp";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export async function GET() {
     }
   }
   return NextResponse.json(
-    { database: { found, connected }, payments: Boolean(process.env.PAYFAST_MODE), email: process.env.QUOTE_DELIVERY === "resend" },
+    { database: { found, connected }, payments: Boolean(process.env.PAYFAST_MODE), email: emailDeliveryEnabled() },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

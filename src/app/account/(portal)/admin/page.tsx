@@ -10,6 +10,7 @@ import {
   adminUpdateServiceAction,
 } from "@/app/account/actions";
 import { payfastConfig } from "@/lib/hosting/payfast";
+import { emailDeliveryEnabled } from "@/lib/smtp";
 import { provisioningMode } from "@/lib/hosting/provisioning";
 import { requireAdmin } from "@/lib/hosting/session";
 import { adminOverview, invoiceNumber } from "@/lib/hosting/store";
@@ -30,7 +31,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
   const unpaid = invoices.filter((i) => i.status === "unpaid");
   const done = typeof sp.done === "string" ? (sp.done === "renewals" ? `${sp.count ?? 0} renewal invoice(s) created.` : doneMessages[sp.done]) : undefined;
   const payfast = payfastConfig();
-  const emailOn = process.env.QUOTE_DELIVERY === "resend" && Boolean(process.env.RESEND_API_KEY);
+  const emailOn = emailDeliveryEnabled();
 
   return (
     <>
@@ -44,8 +45,8 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
           <FormMessage
             message={
               emailOn
-                ? "The invoice email could not be sent. Check the Resend settings and try again."
-                : "Email is not switched on yet, so invoices and alerts are not being sent. Add QUOTE_DELIVERY=resend, RESEND_API_KEY, QUOTE_FROM_EMAIL and QUOTE_TO_EMAIL in Vercel, then redeploy."
+                ? "The invoice email could not be sent. Check the email settings (SMTP_USER and SMTP_PASS) and try again."
+                : "Email is not switched on yet, so invoices and alerts are not being sent. Add QUOTE_DELIVERY=smtp, SMTP_USER (your Gmail address) and SMTP_PASS (a Google app password) in Vercel, then redeploy."
             }
           />
         </div>
