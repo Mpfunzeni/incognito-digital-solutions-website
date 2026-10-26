@@ -25,6 +25,11 @@ export type Location = {
   name: string;
   /** Other names people search with, e.g. "Port Elizabeth" for Gqeberha. */
   alsoKnownAs?: string;
+  /**
+   * Name to lead with in titles and headings when Google Trends shows people
+   * search the older name more (e.g. "web design port elizabeth").
+   */
+  searchName?: string;
   province: Province;
   /** Short regional label shown under the city name. */
   region: string;
@@ -49,7 +54,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "Vaal Triangle, Gauteng",
     seo: {
-      title: "Web Design, SEO and Hosting in Vanderbijlpark",
+      title: "Web Design in Vanderbijlpark | Web Design Company and SEO",
       description:
         "Website design, SEO, hosting, apps and branding for Vanderbijlpark businesses. Get found on Google by customers across the Vaal Triangle. Request a quote.",
     },
@@ -96,7 +101,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "Vaal Triangle, Gauteng",
     seo: {
-      title: "Web Design, SEO and Hosting in Vereeniging",
+      title: "Web Design in Vereeniging | Web Design Company and SEO",
       description:
         "Professional websites, local SEO, hosting and branding for Vereeniging and Vaal River businesses. Reach more local customers on Google. Request a quote.",
     },
@@ -143,7 +148,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "Ekurhuleni, Gauteng",
     seo: {
-      title: "Web Design, SEO and Hosting in Alberton",
+      title: "Web Design in Alberton | Web Design Company and SEO",
       description:
         "Websites, local SEO, hosting and branding for Alberton and Ekurhuleni businesses, from Alrode suppliers to Meyersdal practices. Request a quote today.",
     },
@@ -190,7 +195,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "City of Johannesburg, Gauteng",
     seo: {
-      title: "Web Design, SEO and App Development in Johannesburg",
+      title: "Web Design in Johannesburg | Web Design Company and SEO",
       description:
         "Website design, SEO, mobile apps, hosting and branding for Johannesburg businesses. Compete in Joburg's crowded search results. Request a quote.",
     },
@@ -237,7 +242,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "Northern Johannesburg, Gauteng",
     seo: {
-      title: "Web Design, SEO and Digital Solutions in Sandton",
+      title: "Web Design in Sandton | Web Design Company and SEO",
       description:
         "Premium websites, SEO, apps and branding for Sandton firms, from Rivonia start-ups to corporate offices. Look as good online as you do in person.",
     },
@@ -284,7 +289,7 @@ export const locations: Location[] = [
     province: "KwaZulu-Natal",
     region: "Durban North Coast, KwaZulu-Natal",
     seo: {
-      title: "Web Design, SEO and Hosting in Umhlanga",
+      title: "Web Design in Umhlanga | Web Design Company and SEO",
       description:
         "Websites, SEO, hosting and branding for Umhlanga businesses, from Gateway offices to beachfront hospitality. Get found on Google. Request a quote.",
     },
@@ -331,7 +336,7 @@ export const locations: Location[] = [
     province: "Western Cape",
     region: "City of Cape Town, Western Cape",
     seo: {
-      title: "Web Design, SEO and App Development in Cape Town",
+      title: "Web Design in Cape Town | Web Design Company and SEO",
       description:
         "Website design, SEO, apps, e-commerce and branding for Cape Town businesses, from tech start-ups to tourism. Request a quote from Incognito.",
     },
@@ -379,7 +384,7 @@ export const locations: Location[] = [
     province: "Gauteng",
     region: "City of Tshwane, Gauteng",
     seo: {
-      title: "Web Design, SEO and Hosting in Pretoria",
+      title: "Web Design in Pretoria | Web Design Company and SEO",
       description:
         "Website design, SEO, apps, hosting and branding for Pretoria and Centurion businesses. Get found by customers across Tshwane. Request a quote.",
     },
@@ -426,7 +431,7 @@ export const locations: Location[] = [
     province: "Northern Cape",
     region: "Northern Cape",
     seo: {
-      title: "Web Design, SEO and Hosting in Kimberley",
+      title: "Web Design in Kimberley | Web Design Company and SEO",
       description:
         "Websites, SEO, hosting and branding for Kimberley and Northern Cape businesses. Reach customers across the Diamond City and beyond. Request a quote.",
     },
@@ -473,7 +478,7 @@ export const locations: Location[] = [
     province: "North West",
     region: "Bojanala, North West",
     seo: {
-      title: "Web Design, SEO and Hosting in Rustenburg",
+      title: "Web Design in Rustenburg | Web Design Company and SEO",
       description:
         "Websites, SEO, hosting and branding for Rustenburg businesses, from mining suppliers to Pilanesberg tourism. Get found on Google. Request a quote.",
     },
@@ -521,7 +526,7 @@ export const locations: Location[] = [
     province: "Free State",
     region: "Mangaung, Free State",
     seo: {
-      title: "Web Design, SEO and Hosting in Bloemfontein",
+      title: "Web Design in Bloemfontein | Web Design Company and SEO",
       description:
         "Website design, SEO, hosting and branding for Bloemfontein and Free State businesses. Get found by customers across Mangaung. Request a quote.",
     },
@@ -569,7 +574,7 @@ export const locations: Location[] = [
     province: "Mpumalanga",
     region: "Nkangala, Mpumalanga",
     seo: {
-      title: "Web Design, SEO and Hosting in Witbank (eMalahleni)",
+      title: "Web Design in Witbank (eMalahleni) | Web Design Company and SEO",
       description:
         "Websites, SEO, hosting and branding for Witbank and eMalahleni businesses, from mining and engineering suppliers to local services. Request a quote.",
     },
@@ -617,7 +622,7 @@ export const locations: Location[] = [
     province: "Mpumalanga",
     region: "Ehlanzeni, Mpumalanga",
     seo: {
-      title: "Web Design, SEO and Hosting in Mbombela (Nelspruit)",
+      title: "Web Design in Mbombela (Nelspruit) | Web Design Company and SEO",
       description:
         "Websites, SEO, hosting and branding for Mbombela and Lowveld businesses, from Kruger-area lodges to citrus exporters. Request a quote today.",
     },
@@ -665,7 +670,7 @@ export const locations: Location[] = [
     province: "KwaZulu-Natal",
     region: "eThekwini, KwaZulu-Natal",
     seo: {
-      title: "Web Design, SEO and App Development in Durban",
+      title: "Web Design in Durban | Web Design Company and SEO",
       description:
         "Website design, SEO, apps, e-commerce and hosting for Durban businesses, from port logistics to beachfront tourism. Request a quote today.",
     },
@@ -710,12 +715,13 @@ export const locations: Location[] = [
     slug: "gqeberha",
     name: "Gqeberha",
     alsoKnownAs: "Port Elizabeth",
+    searchName: "Port Elizabeth",
     province: "Eastern Cape",
     region: "Nelson Mandela Bay, Eastern Cape",
     seo: {
-      title: "Web Design, SEO and Hosting in Gqeberha (Port Elizabeth)",
+      title: "Web Design in Port Elizabeth (Gqeberha) | Web Design Company and SEO",
       description:
-        "Websites, SEO, hosting and branding for Gqeberha and Nelson Mandela Bay businesses, from automotive suppliers to tourism. Request a quote.",
+        "Web design, SEO, hosting and branding for Port Elizabeth (Gqeberha) and Nelson Mandela Bay businesses, from automotive suppliers to tourism.",
     },
     intro:
       "We help Gqeberha and Nelson Mandela Bay businesses, from automotive suppliers to Summerstrand guesthouses, grow with websites and local SEO that work.",
@@ -760,7 +766,7 @@ export const locations: Location[] = [
     province: "Limpopo",
     region: "Capricorn, Limpopo",
     seo: {
-      title: "Web Design, SEO and Hosting in Polokwane",
+      title: "Web Design in Polokwane | Web Design Company and SEO",
       description:
         "Website design, SEO, hosting and branding for Polokwane and Limpopo businesses. Get found by customers across Capricorn and beyond. Request a quote.",
     },

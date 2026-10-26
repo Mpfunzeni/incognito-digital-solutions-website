@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ArrowRight, Check, MapPin } from "lucide-react";
 import { getLocation, locations } from "@/content/locations";
 import { getService, publishedServices } from "@/content/services";
+import { formatRand, getServicePricing } from "@/content/service-pricing";
 import { site, absoluteUrl, whatsappUrl } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink, buttonClasses } from "@/components/ui/Button";
@@ -33,7 +34,22 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
   const location = getLocation(slug);
   if (!location) notFound();
 
-  const name = location.alsoKnownAs ? `${location.name} (${location.alsoKnownAs})` : location.name;
+  // Lead with the name people search most (Google Trends), then the other one.
+  const lead = location.searchName ?? location.name;
+  const other = location.searchName ? location.name : location.alsoKnownAs;
+  const name = other ? `${lead} (${other})` : lead;
+  const webDesign = getServicePricing("web-design")?.tiers[0];
+  const faqs = [
+    ...location.faqs,
+    ...(webDesign
+      ? [
+          {
+            question: `How much does web design cost in ${lead}?`,
+            answer: `Our web design packages start from ${formatRand(webDesign.from)} for a ${webDesign.name} website, and the price is the same wherever you are in South Africa. Choose a package and add-ons on our Web Design page to see an estimate, or request a free tailored quote.`,
+          },
+        ]
+      : []),
+  ];
   const quoteHref = "/get-a-quote";
   const focus = location.serviceFocus
     .map((f) => ({ ...f, service: getService(f.service) }))
@@ -78,7 +94,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
     <>
       <PageHero
         eyebrow={location.region}
-        title={`Web Design, SEO and Digital Solutions in ${name}`}
+        title={`Web Design Company in ${name}: Websites, SEO and Digital Marketing`}
         intro={location.intro}
         crumbs={[
           { name: "Areas We Serve", path: "/locations" },
@@ -168,7 +184,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
           <SectionHeading
             id="local-services"
             eyebrow="Services"
-            title={`Our services in ${location.name}`}
+            title={`Web design and digital marketing services in ${lead}`}
             description="The services local businesses ask us for most, plus everything else you need to grow online."
           />
           <ul className="mt-12 grid gap-5 md:grid-cols-3">
@@ -184,7 +200,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
                       <Icon name={s!.icon} className="size-5" />
                     </span>
                     <span className="mt-4 flex items-center gap-1.5 text-lg font-bold text-ink-900">
-                      {s!.shortTitle} in {location.name}
+                      {s!.shortTitle} in {lead}
                       <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </span>
                     <span className="mt-2 leading-relaxed text-text-muted">{text}</span>
@@ -213,7 +229,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
       <section aria-labelledby="location-faq" className="border-t border-line py-20 sm:py-24">
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <SectionHeading id="location-faq" eyebrow="FAQ" title={`Questions from ${location.name} businesses`} />
-          <FaqList faqs={location.faqs} />
+          <FaqList faqs={faqs} />
         </Container>
       </section>
 
@@ -250,7 +266,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
         description="Tell us about your business and goals, and we will recommend the right approach with a clear quotation."
         primary={{ label: "Get a Quote", href: quoteHref }}
       />
-      <JsonLd data={[localLd, faqJsonLd(location.faqs)]} />
+      <JsonLd data={[localLd, faqJsonLd(faqs)]} />
     </>
   );
 }

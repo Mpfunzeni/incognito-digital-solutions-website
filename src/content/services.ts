@@ -50,9 +50,9 @@ export const services: Service[] = [
     benefits: ["Mobile-first, responsive layouts", "Clear calls to action", "Search-ready structure"],
     published: true,
     seo: {
-      title: "Website Design and Development in South Africa",
+      title: "Web Design Company in South Africa | Affordable Web Design Packages",
       description:
-        "Professional, responsive website design and development for South African businesses. Clear structure, fast pages and calls to action that generate enquiries.",
+        "Affordable web design packages from a South African web design company. Responsive website design and development, fast pages and clear calls to action.",
     },
     hero: {
       heading: "Website Design and Development",
@@ -208,9 +208,9 @@ export const services: Service[] = [
     benefits: ["Technical SEO audits", "On-page optimisation", "Local search visibility"],
     published: true,
     seo: {
-      title: "SEO Services for South African Businesses",
+      title: "SEO and Digital Marketing Services in South Africa",
       description:
-        "Practical SEO services: technical audits, on-page optimisation, local search and content guidance to help customers find your business. No unrealistic ranking promises.",
+        "SEO and digital marketing services: technical audits, on-page SEO, local SEO and Google Business Profile optimisation. No false ranking promises.",
     },
     hero: {
       heading: "Search Engine Optimisation (SEO)",
@@ -270,7 +270,7 @@ export const services: Service[] = [
   },
   {
     slug: "web-hosting-domains",
-    title: "Web Hosting and Domain Registration",
+    title: "Website Hosting, Domain Registration and Email Hosting",
     shortTitle: "Hosting and Domains",
     icon: "server",
     accent: "purple",
@@ -279,9 +279,9 @@ export const services: Service[] = [
     benefits: [".co.za and international domains", "SSL certificates (HTTPS)", "Managed set-up and renewals"],
     published: true,
     seo: {
-      title: "Web Hosting and Domain Registration",
+      title: "Website Hosting, Domain Registration and Email Hosting",
       description:
-        "Register your .co.za or international domain and host your website reliably. Incognito Digital Solutions manages set-up, SSL, DNS and renewals for you.",
+        "Website hosting, .co.za domain registration and business email hosting in South Africa. We manage set-up, SSL, DNS and renewals for you.",
     },
     hero: {
       heading: "Web Hosting and Domain Registration",
@@ -350,7 +350,7 @@ export const services: Service[] = [
     benefits: ["Product and category management", "Secure checkout and payments", "Order notifications"],
     published: true,
     seo: {
-      title: "E-commerce Website Development",
+      title: "Ecommerce Website Development and Online Stores",
       description:
         "Online store development for South African businesses: product catalogues, secure checkout, payment gateway integration and a store you can manage yourself.",
     },
@@ -421,7 +421,7 @@ export const services: Service[] = [
     benefits: ["Logo and identity design", "Brand guidelines", "Print and social graphics"],
     published: true,
     seo: {
-      title: "Branding and Graphic Design Services",
+      title: "Logo Design, Branding and Graphic Design Services",
       description:
         "Logo design, visual identity, brand guidelines and marketing graphics for South African businesses that want a consistent, professional image.",
     },
