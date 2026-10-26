@@ -1,6 +1,6 @@
 import "server-only";
 import { site } from "@/content/site";
-import { sendSmtp, smtpConfigured } from "@/lib/smtp";
+import { deliveryMode, sendSmtp, smtpConfigured } from "@/lib/smtp";
 
 /**
  * Transactional email for the hosting system (welcome, password reset,
@@ -31,12 +31,12 @@ export function appUrl(path = "/") {
  */
 export function replyToAddress(env: Record<string, string | undefined> = process.env) {
   if (env.REPLY_TO_EMAIL) return env.REPLY_TO_EMAIL;
-  if (env.QUOTE_DELIVERY === "smtp" && env.SMTP_USER) return env.SMTP_USER;
+  if (deliveryMode(env) === "smtp" && env.SMTP_USER) return env.SMTP_USER;
   return site.contact.email;
 }
 
 export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
-  const mode = process.env.QUOTE_DELIVERY;
+  const mode = deliveryMode();
   const recipients = (Array.isArray(to) ? to : to.split(",")).map((s) => s.trim()).filter(Boolean);
   if (recipients.length === 0) return false;
   const cleanSubject = subject.replace(/[\r\n]+/g, " ").slice(0, 200);

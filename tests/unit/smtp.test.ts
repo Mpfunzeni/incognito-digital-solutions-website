@@ -100,3 +100,23 @@ describe("smtp email", () => {
     }
   });
 });
+
+describe("smtp check", () => {
+  it("names the missing setting", async () => {
+    const { checkSmtp } = await import("@/lib/smtp");
+    expect((await checkSmtp({ QUOTE_DELIVERY: "resend" })).problem).toContain("must be");
+    expect((await checkSmtp({ QUOTE_DELIVERY: "smtp", SMTP_USER: "a@gmail.com" })).problem).toContain("SMTP_PASS");
+  });
+
+  it("logs in to the server without sending", async () => {
+    const smtp = await fakeSmtp();
+    try {
+      Object.assign(process.env, { QUOTE_DELIVERY: "smtp", SMTP_USER: "o@gmail.com", SMTP_PASS: "x", SMTP_HOST: "127.0.0.1", SMTP_PORT: String(smtp.port) });
+      const { checkSmtp } = await import("@/lib/smtp");
+      expect(await checkSmtp()).toEqual({ ok: true, problem: "" });
+      expect(smtp.log.join("\n")).not.toContain("DATA");
+    } finally {
+      smtp.close();
+    }
+  });
+});
