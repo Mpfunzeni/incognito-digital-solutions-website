@@ -33,21 +33,20 @@ src/
   app/                    Routes (App Router)
     page.tsx              Homepage (sections A–K)
     services/             Services overview + /services/[slug] pages
-    pricing/ portfolio/ about/ blog/ contact/ get-a-quote/
+    pricing/ about/ blog/ contact/ get-a-quote/
     privacy-policy/ terms-and-conditions/
     api/quote/route.ts    Quote form endpoint (validation, rate limit, spam checks, email)
     sitemap.ts robots.ts manifest.ts not-found.tsx
     icon.png apple-icon.png favicon.ico
   components/
     layout/               Header (logo top-left, mega-menu, mobile menu), Footer, Analytics, ConsentBanner
-    sections/             Reusable page sections (cards, hero, CTA, process, portfolio, blog)
+    sections/             Reusable page sections (cards, hero, CTA, process, blog)
     forms/QuoteForm.tsx   Quote / contact form
     ui/                   Buttons, headings, FAQ accordion, breadcrumbs, JSON-LD, icons
   content/                ← Edit business content here
     site.ts               Company name, contact details, social links, logo
     services.ts           All service copy, FAQs and page content
     pricing.ts            Packages and (optional) prices
-    portfolio.ts          Portfolio entries (currently demo concepts)
     testimonials.ts       Approved testimonials (empty, so the section is hidden)
     home.ts               Homepage value props, differentiators, process, FAQs
     blog/*.md             Blog articles
@@ -69,7 +68,6 @@ The supplied logo is a **stacked** mark (icon above the wordmark), so in a navig
 - **WhatsApp**: chat number in `src/content/site.ts` (`whatsapp`/`whatsappDisplay`, overridable with `NEXT_PUBLIC_WHATSAPP_NUMBER`). It powers the floating "Chat on WhatsApp" button and the WhatsApp links in the header menu, footer, contact, quote and location pages. `phoneDisplay` is the call-only number.
 - **Services**: edit `src/content/services.ts`. Each entry generates its card, mega-menu entry, sitemap entry and full service page. `optionalServices` holds "Client Account and Payment Solutions", unpublished until confirmed.
 - **Prices**: in `src/content/pricing.ts`, every `price` is `null`, which displays "Request a Quote". To publish a verified price: `price: { amount: 4500, prefix: "From", suffix: "once-off" }`.
-- **Portfolio**: entries in `src/content/portfolio.ts` are labelled demonstration concepts. Replace them with real projects (with client permission) and set `isDemo: false`, `client` and optional `url`.
 - **Testimonials**: add genuine, approved testimonials to `src/content/testimonials.ts`; the homepage section appears automatically.
 - **Blog**: add a Markdown file to `src/content/blog/` with this front matter, then redeploy:
 

@@ -4,7 +4,6 @@ import { site, whatsappUrl } from "@/content/site";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { publishedServices } from "@/content/services";
 import { packages } from "@/content/pricing";
-import { portfolio } from "@/content/portfolio";
 import { differentiators, homeFaqs, processSteps, valueProps } from "@/content/home";
 import { testimonials } from "@/content/testimonials";
 import { Container } from "@/components/ui/Container";
@@ -19,7 +18,6 @@ import { Aurora } from "@/components/ui/Aurora";
 import { ServiceCard } from "@/components/sections/ServiceCard";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { PricingCard } from "@/components/sections/PricingCard";
-import { PortfolioCard } from "@/components/sections/PortfolioCard";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { faqJsonLd, pageMetadata } from "@/lib/seo";
@@ -180,28 +178,6 @@ export default function HomePage() {
           />
           <div className="mt-14">
             <ProcessSteps steps={processSteps} />
-          </div>
-        </Container>
-      </section>
-
-      {/* F: Portfolio */}
-      <section aria-labelledby="work-heading" className="py-20 sm:py-28">
-        <Container>
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SectionHeading
-              id="work-heading"
-              eyebrow="Featured work"
-              title="The kind of work we deliver"
-              description="These are demonstration concepts that illustrate our services. Client case studies will be added here with their permission."
-            />
-            <ButtonLink href="/portfolio" variant="ghost" className="self-start md:self-auto">
-              View portfolio <ArrowRight className="size-4" aria-hidden="true" />
-            </ButtonLink>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {portfolio.slice(0, 3).map((p, i) => (
-              <PortfolioCard key={p.slug} item={p} revealDelay={i} />
-            ))}
           </div>
         </Container>
       </section>

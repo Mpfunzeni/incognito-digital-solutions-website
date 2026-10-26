@@ -14,7 +14,6 @@ const pages = [
   "/hosting",
   "/account/login",
   "/account/sign-up",
-  "/portfolio",
   "/about",
   "/blog",
   "/blog/what-is-seo-and-how-long-does-it-take",

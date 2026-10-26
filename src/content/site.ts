@@ -59,7 +59,6 @@ export const mainNav = [
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
   { label: "Hosting", href: "/hosting" },
-  { label: "Portfolio", href: "/portfolio" },
   { label: "About Us", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },

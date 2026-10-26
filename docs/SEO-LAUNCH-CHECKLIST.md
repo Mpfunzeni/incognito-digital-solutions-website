@@ -12,7 +12,6 @@ Work through this before and immediately after the site goes live.
 - [ ] Old site URLs (if known) are listed in `redirects()` in `next.config.ts`
 - [ ] Contact details in `src/content/site.ts` are confirmed correct
 - [ ] Verified social profiles and Google Business Profile URL are added to `site.social` (or left empty)
-- [ ] Demo portfolio entries are replaced with real projects, or clearly remain labelled as demos
 - [ ] Prices are either verified or left as "Request a Quote"
 - [ ] Privacy Policy and Terms have been reviewed
 - [ ] A test enquiry through `/get-a-quote` and `/contact` arrives in the inbox
