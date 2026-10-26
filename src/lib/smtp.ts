@@ -22,7 +22,15 @@ export function smtpFrom(env: Record<string, string | undefined> = process.env) 
   return env.SMTP_FROM || `${site.name} <${env.SMTP_USER?.trim()}>`;
 }
 
-type SmtpMail = { to: string[]; subject: string; text: string; html?: string; replyTo?: string; from?: string };
+type SmtpMail = {
+  to: string[];
+  subject: string;
+  text: string;
+  html?: string;
+  replyTo?: string;
+  from?: string;
+  attachments?: { filename: string; content: Uint8Array; contentType?: string }[];
+};
 
 async function transport() {
   const { createTransport } = await import("nodemailer");
@@ -46,6 +54,11 @@ export async function sendSmtp(mail: SmtpMail) {
     text: mail.text,
     ...(mail.html ? { html: mail.html } : {}),
     ...(mail.replyTo ? { replyTo: mail.replyTo } : {}),
+    attachments: (mail.attachments ?? []).map((a) => ({
+      filename: a.filename,
+      content: Buffer.from(a.content),
+      contentType: a.contentType ?? "application/pdf",
+    })),
   });
   return info.messageId as string | undefined;
 }

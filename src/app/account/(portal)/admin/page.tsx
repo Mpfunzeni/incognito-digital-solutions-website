@@ -70,7 +70,10 @@ export default async function AdminPage({ searchParams }: PageProps<"/account/ad
               <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 py-3.5">
                 <div className="min-w-0">
                   <p className="font-semibold text-ink-900">
-                    {invoiceNumber(i.number)} · {cents(i.total_cents)}
+                    {invoiceNumber(i.number)} · {cents(i.total_cents)} ·{" "}
+                    <a href={`/account/invoices/${i.id}/pdf`} className="text-sm text-brand-teal-dark underline underline-offset-2">
+                      PDF
+                    </a>
                   </p>
                   <p className="text-sm text-text-muted">
                     {i.full_name} ({i.email}) · {i.lines[0]?.description} · due {formatDate(i.due_date)}

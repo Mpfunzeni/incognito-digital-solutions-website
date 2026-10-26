@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CreditCard, Landmark } from "lucide-react";
+import { ArrowLeft, CreditCard, Download, Landmark } from "lucide-react";
 import { eftDetails } from "@/content/hosting";
 import { site } from "@/content/site";
 import { buttonClasses } from "@/components/ui/Button";
@@ -64,7 +64,12 @@ export default async function InvoicePage({ params, searchParams }: PageProps<"/
               {invoice.paid_at && <> · Paid {formatDate(invoice.paid_at)}</>}
             </p>
           </div>
-          <StatusBadge status={invoice.status} />
+          <div className="flex items-center gap-3">
+            <StatusBadge status={invoice.status} />
+            <a href={`/account/invoices/${invoice.id}/pdf`} className={buttonClasses("secondary", "sm")} data-track="hosting_invoice_pdf">
+              <Download className="size-4" aria-hidden="true" /> Download PDF
+            </a>
+          </div>
         </div>
 
         <div className="grid gap-6 border-b border-line py-6 text-[0.95rem] sm:grid-cols-2">

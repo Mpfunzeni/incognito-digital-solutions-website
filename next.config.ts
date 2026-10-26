@@ -42,6 +42,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Database drivers run on the server only and are not bundled.
   serverExternalPackages: ["postgres", "@electric-sql/pglite"],
+  // The invoice PDF reads the logo from disk, so ship it with the server code.
+  outputFileTracingIncludes: { "/**": ["./public/brand/invoice-logo.png"] },
   trailingSlash: false,
   images: {
     formats: ["image/avif", "image/webp"],

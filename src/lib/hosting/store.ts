@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { eftDetails, getPlan, priceOrder, type BillingCycle, type DomainAction } from "@/content/hosting";
 import { site } from "@/content/site";
 import { query, queryOne } from "./db";
+import { buildInvoicePdf, invoicePdfFilename, type InvoicePdfCustomer } from "./invoice-pdf";
 import { adminEmail, appUrl, sendMail } from "./mailer";
 import { createHostingAccount, provisioningMode } from "./provisioning";
 import type { Customer, Invoice, Service, ServiceStatus } from "./types";
@@ -65,7 +66,7 @@ export function buildInvoiceEmail(invoice: Invoice, customer: Pick<Customer, "fu
     "",
     intro,
     "",
-    `Invoice ${number}  ·  Due ${due}`,
+    `Invoice ${number}  ·  Due ${due}  (PDF attached)`,
     ...invoice.lines.map((l) => `${l.description}: ${rand(l.amount)}`),
     `Total due: ${rand(total)}`,
     "",
@@ -81,7 +82,7 @@ export function buildInvoiceEmail(invoice: Invoice, customer: Pick<Customer, "fu
 <h2 style="margin:0 0 4px">${escapeHtml(site.name)}</h2>
 <p>Hi ${escapeHtml(customer.full_name)},</p>
 <p>${escapeHtml(intro)}</p>
-<p style="margin:24px 0 8px"><strong>Invoice ${number}</strong> &middot; Due ${due}${customer.company ? `<br>Billed to ${escapeHtml(customer.company)}` : ""}</p>
+<p style="margin:24px 0 8px"><strong>Invoice ${number}</strong> &middot; Due ${due} &middot; PDF attached${customer.company ? `<br>Billed to ${escapeHtml(customer.company)}` : ""}</p>
 <table style="width:100%;border-collapse:collapse;font-size:15px">${invoice.lines
     .map((l) => `<tr><td style="${cell}">${escapeHtml(l.description)}</td><td style="${cell};text-align:right;white-space:nowrap">${rand(l.amount)}</td></tr>`)
     .join("")}<tr><td style="padding:12px 0"><strong>Total due</strong></td><td style="padding:12px 0;text-align:right;font-size:18px"><strong>${rand(total)}</strong></td></tr></table>
@@ -94,14 +95,36 @@ ${eft ? `<p style="font-size:14px"><strong>Or pay by EFT</strong><br>${eft.map((
   return { subject, text, html };
 }
 
-/** Emails an invoice to its customer (used on order, renewal and from the admin area). */
-export async function emailInvoice(invoiceId: string, intro = "Here is your invoice.") {
-  const row = await queryOne<Invoice & { email: string; full_name: string; company: string }>(
-    "SELECT i.*, c.email, c.full_name, c.company FROM invoices i JOIN customers c ON c.id = i.customer_id WHERE i.id = $1",
+const CUSTOMER_PDF_COLUMNS =
+  "c.email, c.full_name, c.company, c.address_line1, c.address_line2, c.city, c.province, c.postal_code, c.vat_number";
+
+/** An invoice with the customer details printed on its PDF. */
+export async function getInvoiceForPdf(invoiceId: string) {
+  return queryOne<Invoice & InvoicePdfCustomer>(
+    `SELECT i.*, ${CUSTOMER_PDF_COLUMNS} FROM invoices i JOIN customers c ON c.id = i.customer_id WHERE i.id = $1`,
     [invoiceId],
   );
+}
+
+export async function invoicePdf(invoice: Invoice, customer: InvoicePdfCustomer) {
+  return {
+    filename: invoicePdfFilename(invoice),
+    content: await buildInvoicePdf(invoice, customer, { payUrl: appUrl(`/account/invoices/${invoice.id}`) }),
+    contentType: "application/pdf",
+  };
+}
+
+/** Emails an invoice, with its PDF attached, to its customer (on order, renewal and from the admin area). */
+export async function emailInvoice(invoiceId: string, intro = "Here is your invoice.") {
+  const row = await getInvoiceForPdf(invoiceId);
   if (!row) return false;
-  return sendMail({ to: row.email, ...buildInvoiceEmail(row, row, intro) });
+  let attachments: Awaited<ReturnType<typeof invoicePdf>>[] = [];
+  try {
+    attachments = [await invoicePdf(row, row)];
+  } catch (err) {
+    console.error("[invoice-pdf] could not build PDF", err);
+  }
+  return sendMail({ to: row.email, ...buildInvoiceEmail(row, row, intro), attachments });
 }
 
 // --- Customers ---------------------------------------------------------------
@@ -172,14 +195,10 @@ export async function placeOrder(
   );
   if (!invoice) throw new Error("Could not create invoice");
 
-  await sendMail({
-    to: customer.email,
-    ...buildInvoiceEmail(
-      invoice,
-      customer,
-      `Thank you for your order: ${plan.name} hosting for ${input.domain}. We set up your hosting as soon as payment is received.`,
-    ),
-  });
+  await emailInvoice(
+    invoice.id,
+    `Thank you for your order: ${plan.name} hosting for ${input.domain}. We set up your hosting as soon as payment is received.`,
+  );
   await sendMail({
     to: adminEmail(),
     subject: `New hosting order ${invoiceNumber(invoice.number)}: ${plan.name} for ${input.domain}`,
@@ -234,10 +253,15 @@ export async function markInvoicePaid(invoiceId: string, method: string, referen
     isoDate(addCycle(base, service.billing_cycle)),
   ]);
 
+  const receipt = await invoicePdf(invoice, customer).catch((err) => {
+    console.error("[invoice-pdf] could not build PDF", err);
+    return null;
+  });
   await sendMail({
     to: customer.email,
     subject: `Payment received for ${invoiceNumber(invoice.number)}`,
-    text: `Hi ${customer.full_name},\n\nWe have received your payment of R${(invoice.total_cents / 100).toFixed(2)} for ${invoiceNumber(invoice.number)}. Thank you.\n\n${
+    attachments: receipt ? [receipt] : [],
+    text: `Hi ${customer.full_name},\n\nWe have received your payment of R${(invoice.total_cents / 100).toFixed(2)} for ${invoiceNumber(invoice.number)}. Thank you. Your paid invoice is attached as a PDF.\n\n${
       invoice.kind === "new" ? "We are setting up your hosting now and will let you know when it is ready.\n\n" : ""
     }Your account: ${appUrl("/account")}\n\n${site.name}`,
   });
@@ -325,10 +349,7 @@ export async function createRenewalInvoices(daysAhead = 14) {
     );
     if (!inv) continue;
     created++;
-    await sendMail({
-      to: s.email,
-      ...buildInvoiceEmail(inv, { full_name: s.full_name, company: "", email: s.email }, `Your ${plan.name} hosting for ${s.domain} renews on ${isoDate(dueDate)}.`),
-    });
+    await emailInvoice(inv.id, `Your ${plan.name} hosting for ${s.domain} renews on ${isoDate(dueDate)}.`);
   }
   return created;
 }

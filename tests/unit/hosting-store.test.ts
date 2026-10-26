@@ -7,6 +7,8 @@ import {
   buildInvoiceEmail,
   createRenewalInvoices,
   emailInvoice,
+  getInvoiceForPdf,
+  invoicePdf,
   findCustomerByEmail,
   listInvoices,
   listServices,
@@ -75,6 +77,18 @@ describe("hosting store", () => {
     expect(mail.html).toContain("A &amp; B &lt;Ltd&gt;");
     expect(await emailInvoice(invoice.id)).toBe(true);
     expect(await emailInvoice("missing")).toBe(false);
+  });
+
+  it("builds a one-page invoice PDF, even with characters the PDF font lacks", async () => {
+    const { PDFDocument } = await import("pdf-lib");
+    const c = await newCustomer(`pdf${run}@example.com`);
+    const invoice = await placeOrder(c, { planId: "pro", cycle: "annually", domainAction: "transfer", domain: "pdfbiz.com" });
+    const row = await getInvoiceForPdf(invoice.id);
+    expect(row?.email).toBe(`pdf${run}@example.com`);
+    const pdf = await invoicePdf(row!, { ...row!, full_name: "Ŋozi Dlamini 😀", company: "Ndlovu & Sons (Pty) Ltd" });
+    expect(pdf.filename).toBe(`Invoice-INV-${invoice.number}.pdf`);
+    expect(Buffer.from(pdf.content.slice(0, 5)).toString()).toBe("%PDF-");
+    expect((await PDFDocument.load(pdf.content)).getPageCount()).toBe(1);
   });
 
   it("cancelling an unpaid new order cancels the service", async () => {

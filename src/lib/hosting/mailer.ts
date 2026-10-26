@@ -11,7 +11,8 @@ import { deliveryMode, sendSmtp, smtpConfigured } from "@/lib/smtp";
  * customer's action still completes.
  */
 
-type Mail = { to: string | string[]; subject: string; text: string; html?: string; replyTo?: string };
+export type MailAttachment = { filename: string; content: Uint8Array; contentType?: string };
+type Mail = { to: string | string[]; subject: string; text: string; html?: string; replyTo?: string; attachments?: MailAttachment[] };
 
 /**
  * Base URL for links in emails. Uses HOSTING_APP_URL if set, otherwise the
@@ -35,7 +36,7 @@ export function replyToAddress(env: Record<string, string | undefined> = process
   return site.contact.email;
 }
 
-export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
+export async function sendMail({ to, subject, text, html, replyTo, attachments = [] }: Mail) {
   const mode = deliveryMode();
   const recipients = (Array.isArray(to) ? to : to.split(",")).map((s) => s.trim()).filter(Boolean);
   if (recipients.length === 0) return false;
@@ -50,6 +51,7 @@ export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
         text,
         html,
         replyTo: replyTo || replyToAddress(),
+        attachments,
       });
       return true;
     } catch (err) {
@@ -71,6 +73,9 @@ export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
           text,
           ...(html ? { html } : {}),
           reply_to: replyTo || replyToAddress(),
+          ...(attachments.length
+            ? { attachments: attachments.map((a) => ({ filename: a.filename, content: Buffer.from(a.content).toString("base64") })) }
+            : {}),
         }),
         signal: AbortSignal.timeout(10_000),
       });
@@ -83,7 +88,11 @@ export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
   }
 
   if (process.env.NODE_ENV !== "production") {
-    console.info(`[hosting-mail] (not emailed) To: ${recipients.join(", ")}\nSubject: ${cleanSubject}\n${text}`);
+    console.info(
+      `[hosting-mail] (not emailed) To: ${recipients.join(", ")}\nSubject: ${cleanSubject}\n${text}${
+        attachments.length ? `\nAttachments: ${attachments.map((a) => a.filename).join(", ")}` : ""
+      }`,
+    );
     return true;
   }
   console.error("[hosting-mail] Email is not configured; message not sent:", cleanSubject);
