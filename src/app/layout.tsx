@@ -19,6 +19,9 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+/** Search Console, URL-prefix property for the vercel.app address (added 2026-10-26). */
+const GOOGLE_SITE_VERIFICATION = "9rUHTj1HEU8pAP6DJm74t1m6QT4BGZh58bABT0oNeGc";
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -35,9 +38,13 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: allowIndexing ? { index: true, follow: true } : { index: false, follow: false },
-  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  // Search Console HTML-tag tokens are public. Keep this one in place: Google re-checks it
+  // to keep the property verified. NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION adds another.
+  verification: {
+    google: [GOOGLE_SITE_VERIFICATION, process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION].filter(
+      (t): t is string => Boolean(t),
+    ),
+  },
   formatDetection: { telephone: false },
 };
 
