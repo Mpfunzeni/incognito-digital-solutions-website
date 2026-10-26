@@ -3,9 +3,9 @@
 import { randomBytes } from "node:crypto";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { absoluteUrl, site } from "@/content/site";
+import { site } from "@/content/site";
 import { query, queryOne, isDatabaseConfigured } from "@/lib/hosting/db";
-import { sendMail } from "@/lib/hosting/mailer";
+import { appUrl, sendMail } from "@/lib/hosting/mailer";
 import { DUMMY_HASH, hashPassword, verifyPassword } from "@/lib/hosting/password";
 import { cpanelLoginUrl, provisioningMode } from "@/lib/hosting/provisioning";
 import {
@@ -21,6 +21,7 @@ import {
   cancelInvoice,
   createCustomer,
   createRenewalInvoices,
+  emailInvoice,
   findCustomerByEmail,
   getService,
   markInvoicePaid,
@@ -88,7 +89,7 @@ export async function signUpAction(_prev: FormState, formData: FormData): Promis
   await sendMail({
     to: customer.email,
     subject: `Welcome to ${site.name}`,
-    text: `Hi ${customer.full_name},\n\nYour ${site.name} account is ready. Manage your hosting, invoices and profile at ${absoluteUrl("/account")}.\n\n${site.name}\n${site.contact.phoneDisplay}`,
+    text: `Hi ${customer.full_name},\n\nYour ${site.name} account is ready. Manage your hosting, invoices and profile at ${appUrl("/account")}.\n\n${site.name}\n${site.contact.phoneDisplay}`,
   });
   redirect(safeNext(str(formData, "next")));
 }
@@ -134,7 +135,7 @@ export async function requestResetAction(_prev: FormState, formData: FormData): 
     await sendMail({
       to: customer.email,
       subject: `Reset your ${site.name} password`,
-      text: `Hi ${customer.full_name},\n\nUse this link within one hour to choose a new password:\n${absoluteUrl(`/account/reset-password?token=${token}`)}\n\nIf you did not ask for this, ignore this email; your password stays the same.\n\n${site.name}`,
+      text: `Hi ${customer.full_name},\n\nUse this link within one hour to choose a new password:\n${appUrl(`/account/reset-password?token=${token}`)}\n\nIf you did not ask for this, ignore this email; your password stays the same.\n\n${site.name}`,
     });
   }
   return { ok: true, message: "If an account exists for that email, we have sent a link to reset the password. Check your inbox and spam folder." };
@@ -247,4 +248,10 @@ export async function adminRunRenewalsAction() {
   await requireAdmin();
   const created = await createRenewalInvoices();
   redirect(`/account/admin?done=renewals&count=${created}`);
+}
+
+export async function adminEmailInvoiceAction(formData: FormData) {
+  await requireAdmin();
+  const sent = await emailInvoice(str(formData, "invoiceId"));
+  redirect(`/account/admin?done=${sent ? "emailed" : "email-failed"}`);
 }

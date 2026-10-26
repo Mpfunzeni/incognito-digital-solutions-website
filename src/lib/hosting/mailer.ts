@@ -1,4 +1,5 @@
 import "server-only";
+import { site } from "@/content/site";
 
 /**
  * Transactional email for the hosting system (welcome, password reset,
@@ -8,9 +9,20 @@ import "server-only";
  * customer's action still completes.
  */
 
-type Mail = { to: string | string[]; subject: string; text: string };
+type Mail = { to: string | string[]; subject: string; text: string; html?: string; replyTo?: string };
 
-export async function sendMail({ to, subject, text }: Mail) {
+/**
+ * Base URL for links in emails. Uses HOSTING_APP_URL if set, otherwise the
+ * production domain Vercel reports (the custom domain once one is connected),
+ * otherwise the configured site URL.
+ */
+export function appUrl(path = "/") {
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const base = (process.env.HOSTING_APP_URL || (vercel ? `https://${vercel}` : "") || site.url).replace(/\/$/, "");
+  return `${base}${path === "/" ? "" : path}`;
+}
+
+export async function sendMail({ to, subject, text, html, replyTo }: Mail) {
   const mode = process.env.QUOTE_DELIVERY;
   const recipients = (Array.isArray(to) ? to : to.split(",")).map((s) => s.trim()).filter(Boolean);
   if (recipients.length === 0) return false;
@@ -22,7 +34,14 @@ export async function sendMail({ to, subject, text }: Mail) {
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ from, to: recipients, subject: cleanSubject, text }),
+        body: JSON.stringify({
+          from,
+          to: recipients,
+          subject: cleanSubject,
+          text,
+          ...(html ? { html } : {}),
+          reply_to: replyTo || site.contact.email,
+        }),
         signal: AbortSignal.timeout(10_000),
       });
       if (!res.ok) console.error(`[hosting-mail] Resend responded ${res.status}`);
