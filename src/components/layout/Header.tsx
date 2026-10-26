@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, Phone, UserRound, X } from "lucide-react";
-import { mainNav, site } from "@/content/site";
+import { mainNav, site, whatsappUrl } from "@/content/site";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { publishedServices } from "@/content/services";
 import { Icon, accentClasses } from "@/components/ui/Icon";
 import { buttonClasses } from "@/components/ui/Button";
@@ -282,6 +283,14 @@ export function Header() {
             <Link href="/account" onClick={() => setMobileOpen(false)} className={buttonClasses("dark", "lg", "w-full")}>
               <UserRound className="size-4" aria-hidden="true" /> Client login
             </Link>
+            <a
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses("secondary", "lg", "w-full bg-[#25D366] text-ink-900 hover:bg-[#3ee07c]")}
+            >
+              <WhatsAppIcon className="size-4" /> WhatsApp {site.contact.whatsappDisplay}
+            </a>
             <a href={`tel:${site.contact.phoneE164}`} className={buttonClasses("secondary", "lg", "w-full")}>
               <Phone className="size-4" aria-hidden="true" /> Call {site.contact.phoneDisplay}
             </a>

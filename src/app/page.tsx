@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Phone } from "lucide-react";
-import { site } from "@/content/site";
+import { site, whatsappUrl } from "@/content/site";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { publishedServices } from "@/content/services";
 import { packages } from "@/content/pricing";
 import { portfolio } from "@/content/portfolio";
 import { differentiators, homeFaqs, processSteps, valueProps } from "@/content/home";
 import { testimonials } from "@/content/testimonials";
 import { Container } from "@/components/ui/Container";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { FaqList } from "@/components/ui/FaqList";
@@ -141,6 +142,9 @@ export default function HomePage() {
               <ButtonLink href={`tel:${site.contact.phoneE164}`} variant="ghost">
                 <Phone className="size-4" aria-hidden="true" /> {site.contact.phoneDisplay}
               </ButtonLink>
+              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className={buttonClasses("ghost")}>
+                <WhatsAppIcon className="size-4 text-[#128C7E]" /> WhatsApp us
+              </a>
             </div>
           </div>
           <ul className="grid gap-5 sm:grid-cols-2">

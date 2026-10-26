@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, Globe } from "lucide-react";
-import { mainNav, site } from "@/content/site";
+import { mainNav, site, whatsappUrl } from "@/content/site";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { publishedServices } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
@@ -106,7 +107,19 @@ export function Footer() {
                   <span className="grid size-9 place-items-center rounded-full bg-white text-brand-teal-dark ring-1 ring-line">
                     <Phone className="size-4" aria-hidden="true" />
                   </span>
-                  {site.contact.phoneDisplay}
+                  <span>
+                    {site.contact.phoneDisplay} <span className="text-sm text-text-muted">(calls)</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 hover:text-ink-900">
+                  <span className="grid size-9 place-items-center rounded-full bg-white text-[#128C7E] ring-1 ring-line">
+                    <WhatsAppIcon className="size-4" />
+                  </span>
+                  <span>
+                    {site.contact.whatsappDisplay} <span className="text-sm text-text-muted">(WhatsApp)</span>
+                  </span>
                 </a>
               </li>
               <li>

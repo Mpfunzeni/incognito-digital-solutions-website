@@ -66,7 +66,7 @@ The supplied logo is a **stacked** mark (icon above the wordmark), so in a navig
 ## Updating content
 
 - **Contact details / social links**: `src/content/site.ts`. Social links that are empty are not shown anywhere (including structured data).
-- **WhatsApp**: set `NEXT_PUBLIC_WHATSAPP_NUMBER` once the business number is verified; the WhatsApp contact option appears automatically.
+- **WhatsApp**: chat number in `src/content/site.ts` (`whatsapp`/`whatsappDisplay`, overridable with `NEXT_PUBLIC_WHATSAPP_NUMBER`). It powers the floating "Chat on WhatsApp" button and the WhatsApp links in the header menu, footer, contact, quote and location pages. `phoneDisplay` is the call-only number.
 - **Services**: edit `src/content/services.ts`. Each entry generates its card, mega-menu entry, sitemap entry and full service page. `optionalServices` holds "Client Account and Payment Solutions", unpublished until confirmed.
 - **Prices**: in `src/content/pricing.ts`, every `price` is `null`, which displays "Request a Quote". To publish a verified price: `price: { amount: 4500, prefix: "From", suffix: "once-off" }`.
 - **Portfolio**: entries in `src/content/portfolio.ts` are labelled demonstration concepts. Replace them with real projects (with client permission) and set `isDemo: false`, `client` and optional `url`.
